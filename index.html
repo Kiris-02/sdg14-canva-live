@@ -1199,7 +1199,8 @@
           </div>
         </div>
 
-        <button id="btn-undo" class="btn-tb btn-tb-undo" onclick="performUndo()" title="Hoàn tác thao tác vừa rồi (Ctrl+Z)">↩️ Hoàn tác</button>
+        <button id="btn-undo" class="btn-tb btn-tb-undo" onclick="performUndo()" title="Hoàn tác thao tác vừa rồi [Ctrl+Z]">↩️ Hoàn tác</button>
+        <button id="btn-redo" class="btn-tb btn-tb-undo" onclick="performRedo()" title="Làm lại thao tác vừa hủy [Ctrl+Y]">↪️ Làm lại</button>
         <button id="btn-save-edits" class="btn-tb btn-tb-save">☁️ Lưu & Đồng bộ cả nhóm</button>
         <button id="btn-download-html" class="btn-tb">📥 Tải file HTML mới</button>
         <button id="btn-restore-slide" class="btn-tb" style="background: rgba(245, 158, 11, 0.2); border-color:#f59e0b; color:#fbbf24;" onclick="restoreCurrentSlide()" title="Khôi phục riêng Slide đang xem về nguyên bản">🔄 Khôi phục Slide này</button>
@@ -2383,17 +2384,28 @@
     // UNDO HISTORY & ADVANCED CARD POSITIONING ENGINE
     // ========================================================
     const undoStack = [];
-    const MAX_UNDO = 20;
+    const redoStack = [];
+    const MAX_UNDO = 30;
+    let isPerformingUndoRedo = false;
 
     function saveUndoState() {
+      if (isPerformingUndoRedo) return;
       const activeSlide = slides[currentIndex];
       if (!activeSlide) return;
-      // Save HTML snapshot of active slide
+      const currentHtml = activeSlide.innerHTML;
+      if (undoStack.length > 0) {
+        const top = undoStack[undoStack.length - 1];
+        if (top.slideIndex === currentIndex && top.html === currentHtml) {
+          return; // Skip duplicate snapshot
+        }
+      }
       undoStack.push({
         slideIndex: currentIndex,
-        html: activeSlide.innerHTML
+        html: currentHtml
       });
       if (undoStack.length > MAX_UNDO) undoStack.shift();
+      redoStack.length = 0; // Clear redo on any new manual action
+      updateUndoRedoButtons();
     }
 
     function performUndo() {
@@ -2401,12 +2413,88 @@
         showToast('ℹ Không còn thao tác nào để hoàn tác.');
         return;
       }
+      isPerformingUndoRedo = true;
+      const activeSlide = slides[currentIndex];
+      if (activeSlide) {
+        redoStack.push({
+          slideIndex: currentIndex,
+          html: activeSlide.innerHTML
+        });
+      }
+
       const lastState = undoStack.pop();
       const targetSlide = slides[lastState.slideIndex];
       if (targetSlide) {
+        if (currentIndex !== lastState.slideIndex) {
+          updateSlide(lastState.slideIndex);
+        }
         targetSlide.innerHTML = lastState.html;
-        setupCardEvents(targetSlide);
-        showToast('↩️ Đã hoàn tác thao tác vừa rồi thành công!');
+
+        // Re-attach card events and selection handlers
+        targetSlide.querySelectorAll('.metric-card').forEach(attachCardDragEvents);
+        setupElementSelection();
+
+        // Refresh Edit Mode if active to restore contenteditable & handlers
+        if (isEditMode) {
+          toggleEditMode(false);
+          toggleEditMode(true);
+        }
+
+        // Immediately sync restored state to Cloud and LocalStorage
+        saveEdits(true);
+        updateUndoRedoButtons();
+        showToast(`↩️ Đã hoàn tác! (Còn ${undoStack.length} bước lùi)`);
+      }
+      setTimeout(() => { isPerformingUndoRedo = false; }, 250);
+    }
+
+    function performRedo() {
+      if (!redoStack.length) {
+        showToast('ℹ Không còn thao tác nào để làm lại.');
+        return;
+      }
+      isPerformingUndoRedo = true;
+      const activeSlide = slides[currentIndex];
+      if (activeSlide) {
+        undoStack.push({
+          slideIndex: currentIndex,
+          html: activeSlide.innerHTML
+        });
+      }
+
+      const nextState = redoStack.pop();
+      const targetSlide = slides[nextState.slideIndex];
+      if (targetSlide) {
+        if (currentIndex !== nextState.slideIndex) {
+          updateSlide(nextState.slideIndex);
+        }
+        targetSlide.innerHTML = nextState.html;
+
+        targetSlide.querySelectorAll('.metric-card').forEach(attachCardDragEvents);
+        setupElementSelection();
+
+        if (isEditMode) {
+          toggleEditMode(false);
+          toggleEditMode(true);
+        }
+
+        saveEdits(true);
+        updateUndoRedoButtons();
+        showToast(`↪️ Đã làm lại! (Còn ${redoStack.length} bước tiến)`);
+      }
+      setTimeout(() => { isPerformingUndoRedo = false; }, 250);
+    }
+
+    function updateUndoRedoButtons() {
+      const btnUndo = document.getElementById('btn-undo');
+      const btnRedo = document.getElementById('btn-redo');
+      if (btnUndo) {
+        btnUndo.style.opacity = undoStack.length ? '1' : '0.4';
+        btnUndo.title = `Hoàn tác [Ctrl+Z] (${undoStack.length} bước)`;
+      }
+      if (btnRedo) {
+        btnRedo.style.opacity = redoStack.length ? '1' : '0.4';
+        btnRedo.title = `Làm lại [Ctrl+Y] (${redoStack.length} bước)`;
       }
     }
 
@@ -2936,7 +3024,17 @@
           el.setAttribute('contenteditable', 'true');
           el.setAttribute('spellcheck', 'false');
           if (!el._hasAutoSave) {
-            el.addEventListener('input', triggerAutoSave);
+            el.addEventListener('focus', () => {
+              saveUndoState();
+            });
+            let textUndoTimer = null;
+            el.addEventListener('input', () => {
+              clearTimeout(textUndoTimer);
+              textUndoTimer = setTimeout(() => {
+                saveUndoState();
+              }, 1200);
+              triggerAutoSave();
+            });
             el.addEventListener('blur', () => saveEdits(true));
             el._hasAutoSave = true;
           }
@@ -3048,7 +3146,7 @@
       clearTimeout(autoSaveTimer);
       autoSaveTimer = setTimeout(() => {
         saveEdits(true);
-      }, 1500);
+      }, 2500);
     }
 
     async function syncToCloud(data) {
@@ -3302,8 +3400,25 @@
 
     // Load saved edits right away on startup
     applySavedEdits();
+    updateUndoRedoButtons();
 
     window.addEventListener('keydown', (e) => {
+      const isZ = e.key.toLowerCase() === 'z';
+      const isY = e.key.toLowerCase() === 'y';
+      const isCtrl = e.ctrlKey || e.metaKey;
+
+      // Global Undo (Ctrl+Z) & Redo (Ctrl+Y / Ctrl+Shift+Z)
+      if (isCtrl && isZ && !e.shiftKey) {
+        e.preventDefault();
+        if (isEditMode) performUndo();
+        return;
+      }
+      if (isCtrl && (isY || (isZ && e.shiftKey))) {
+        e.preventDefault();
+        if (isEditMode) performRedo();
+        return;
+      }
+
       // If typing in an editable field, ignore navigation keys except Escape to blur
       if (e.target && (e.target.isContentEditable || ['INPUT', 'TEXTAREA'].includes(e.target.tagName))) {
         if (e.key === 'Escape') {
