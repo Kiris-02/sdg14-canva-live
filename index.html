@@ -1,0 +1,3484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SDG 14: Life Below Water — Canva Live Collaborative Deck</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body { background-color: #030712; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; height: 100vh; width: 100vw; }
+
+    /* --- 1. Hollywood 8K Backgrounds (Crisp, High-FPS Ken Burns Camera Motion) --- */
+    .bg-layer { 
+      position: fixed; 
+      top: -5%; 
+      left: -5%; 
+      width: 110vw; 
+      height: 110vh; 
+      background-size: cover; 
+      background-position: center; 
+      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1); 
+      z-index: 0; 
+      opacity: 0; 
+      animation: hollywoodCameraDrift 28s ease-in-out infinite alternate;
+      will-change: transform;
+      filter: brightness(0.92) contrast(1.04) saturate(1.08);
+    }
+    .bg-layer.active { 
+      opacity: 1; 
+    }
+
+    @keyframes hollywoodCameraDrift {
+      0% {
+        transform: scale(1.01) translate(0px, 0px);
+      }
+      35% {
+        transform: scale(1.05) translate(-15px, 10px);
+      }
+      70% {
+        transform: scale(1.03) translate(12px, -12px);
+      }
+      100% {
+        transform: scale(1.06) translate(-8px, -16px);
+      }
+    }
+
+    /* --- 2. Ambient Sunlight Caustics Layer --- */
+    .ocean-caustics {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.26;
+      background: 
+        radial-gradient(ellipse at 35% 20%, rgba(56, 189, 248, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 75% 65%, rgba(45, 212, 191, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse at 40% 85%, rgba(96, 165, 250, 0.2) 0%, transparent 50%);
+      filter: blur(25px);
+      animation: causticsWave 14s ease-in-out infinite alternate;
+      mix-blend-mode: screen;
+    }
+
+    @keyframes causticsWave {
+      0% { transform: scale(1) translate(0, 0) rotate(0deg); opacity: 0.2; }
+      50% { transform: scale(1.1) translate(-25px, 15px) rotate(1.5deg); opacity: 0.34; }
+      100% { transform: scale(1.05) translate(20px, -20px) rotate(-1.5deg); opacity: 0.24; }
+    }
+
+    /* --- 3. 3D WebGL Particle System (Depth & Luminescence) --- */
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* --- 4. Micro-Bubbles Ambient Living Canvas --- */
+    #marine-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* --- 5. Soft Vignette Overlay --- */
+    .cinematic-vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(3, 7, 18, 0.05) 0%, rgba(3, 7, 18, 0.55) 100%),
+                  linear-gradient(to bottom, rgba(3, 7, 18, 0.38) 0%, transparent 18%, transparent 82%, rgba(3, 7, 18, 0.7) 100%);
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* --- 10. Presentation Stage --- */
+    .stage {
+      position: relative;
+      z-index: 10;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2.5rem 4.5rem;
+    }
+
+    /* Top HUD */
+    .hud-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .depth-badge {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 0.4rem 1rem;
+      border-radius: 9999px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+    }
+    .portal-link {
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 0.4rem 1rem;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+    }
+    .portal-link:hover {
+      color: #38bdf8;
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+    }
+
+    /* Slide Viewport */
+    .slide-viewport {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide {
+      position: absolute;
+      width: 100%;
+      max-width: 1240px;
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Meta Pills Row */
+    .slide-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.1rem;
+    }
+    .pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 9999px;
+    }
+    .pill-target {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+    }
+    .pill-question {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: #c084fc;
+    }
+    .pill-speaker {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: #34d399;
+    }
+
+    .slide-title {
+      font-size: 3.25rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 1050px;
+    }
+    .slide-subtitle {
+      font-size: 1.25rem;
+      color: #94a3b8;
+      margin-bottom: 2.2rem;
+      font-weight: 400;
+      max-width: 850px;
+    }
+
+    /* Metric Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+    }
+    .metric-card {
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(20px);
+      border-radius: 1.25rem;
+      padding: 1.75rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .metric-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .border-cyan::before { background: #38bdf8; box-shadow: 0 0 15px #38bdf8; }
+    .border-emerald::before { background: #34d399; box-shadow: 0 0 15px #34d399; }
+    .border-blue::before { background: #60a5fa; box-shadow: 0 0 15px #60a5fa; }
+    .border-rose::before { background: #fb7185; box-shadow: 0 0 15px #fb7185; }
+
+    .card-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #94a3b8; margin-bottom: 0.5rem; }
+    .card-stat { font-family: 'Space Grotesk', sans-serif; font-size: 2.35rem; font-weight: 700; color: #ffffff; margin-bottom: 0.5rem; line-height: 1.15; }
+    .card-desc { font-size: 0.95rem; color: #cbd5e1; line-height: 1.55; }
+
+    /* Bottom HUD and Autohide */
+    .hud-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hud-bottom.autohide {
+      opacity: 0.1;
+    }
+    .hud-bottom.autohide:hover {
+      opacity: 1;
+    }
+
+    /* Direct Slide Jump Bar */
+    .slide-dots-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 0.35rem 0.65rem;
+      border-radius: 9999px;
+      backdrop-filter: blur(12px);
+    }
+    .dot-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #64748b;
+      font-family: 'Space Grotesk', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.3rem 0.5rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dot-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .dot-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+    }
+
+    /* Navigation Arrows & Counter */
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .btn-nav {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: #f8fafc;
+      width: 3.25rem;
+      height: 3.25rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.35rem;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(12px);
+    }
+    .btn-nav:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38bdf8;
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+    }
+    .slide-counter {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .slide-counter span {
+      color: #f8fafc;
+    }
+
+    /* Action Buttons & Fullscreen Dimming */
+    .btn-action {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #e2e8f0;
+      padding: 0.65rem 1.4rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      backdrop-filter: blur(12px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s ease, background 0.3s ease, border-color 0.3s ease;
+    }
+    .btn-action:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: scale(1.05);
+      opacity: 1 !important;
+    }
+    .btn-action.dimmed {
+      opacity: 0.18 !important;
+    }
+    .btn-action.dimmed:hover {
+      opacity: 0.95 !important;
+      transform: scale(1.04);
+    }
+
+    /* Simulated Fullscreen Fallback */
+    body.simulated-fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 999999;
+    }
+
+    /* --- In-Browser Edit Mode Enhancements --- */
+    .hud-top-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-edit-toggle {
+      color: #e2e8f0;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 0.4rem 1.1rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+    }
+    .btn-edit-toggle:hover {
+      color: #f59e0b;
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.15);
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+    }
+    .btn-edit-toggle.active {
+      color: #ffffff;
+      background: #d97706;
+      border-color: #f59e0b;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+      animation: pulseEdit 2s infinite alternate;
+    }
+
+    @keyframes pulseEdit {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.04); }
+    }
+
+    /* Floating Edit Toolbar */
+    .edit-toolbar {
+      position: fixed;
+      top: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99999;
+      background: rgba(15, 23, 42, 0.94);
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(245, 158, 11, 0.25);
+      backdrop-filter: blur(20px);
+      border-radius: 9999px;
+      padding: 0.5rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .edit-toolbar.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -20px);
+    }
+    .edit-toolbar-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .edit-toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-tb {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: #f8fafc;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+    .btn-tb:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+    .btn-tb-save {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.5);
+    }
+    .btn-tb-save:hover {
+      background: #0369a1;
+      color: #ffffff;
+      transform: scale(1.04);
+    }
+    .btn-tb-danger:hover {
+      background: rgba(225, 29, 72, 0.25);
+      border-color: #f43f5e;
+      color: #fb7185;
+    }
+    .btn-tb-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      padding: 0.2rem 0.6rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .btn-tb-close:hover {
+      color: #f8fafc;
+    }
+
+    /* ContentEditable visual hints in Edit Mode */
+    body.edit-mode-active .slide-title,
+    body.edit-mode-active .slide-subtitle,
+    body.edit-mode-active .pill,
+    body.edit-mode-active .card-label,
+    body.edit-mode-active .card-stat,
+    body.edit-mode-active .card-desc {
+      cursor: text !important;
+      user-select: text !important;
+      border-radius: 6px;
+      transition: background 0.2s ease, outline 0.2s ease, box-shadow 0.2s ease;
+    }
+    body.edit-mode-active .slide-title:hover,
+    body.edit-mode-active .slide-subtitle:hover,
+    body.edit-mode-active .pill:hover,
+    body.edit-mode-active .card-label:hover,
+    body.edit-mode-active .card-stat:hover,
+    body.edit-mode-active .card-desc:hover {
+      outline: 1.5px dashed rgba(245, 158, 11, 0.85);
+      background: rgba(245, 158, 11, 0.12);
+    }
+    body.edit-mode-active .slide-title:focus,
+    body.edit-mode-active .slide-subtitle:focus,
+    body.edit-mode-active .pill:focus,
+    body.edit-mode-active .card-label:focus,
+    body.edit-mode-active .card-stat:focus,
+    body.edit-mode-active .card-desc:focus {
+      outline: 2px solid #f59e0b !important;
+      background: rgba(245, 158, 11, 0.22) !important;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.45);
+    }
+
+    /* Floating Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid #38bdf8;
+      color: #f8fafc;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.35);
+      backdrop-filter: blur(16px);
+      z-index: 999999;
+      opacity: 1;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+    .toast.hidden {
+      opacity: 0;
+      transform: translate(-50%, 15px);
+    }
+
+
+    /* ========================================================
+       MINI-CANVA VISUAL EDITOR STYLES
+       ======================================================== */
+    
+    /* Active selection box */
+    body.edit-mode-active .canva-selected {
+      outline: 2px solid #38bdf8 !important;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.6) !important;
+      position: relative !important;
+    }
+
+    /* Floating Mini-Canva Inspector Bar */
+    .canva-inspector {
+      position: fixed;
+      z-index: 100000;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.35);
+      backdrop-filter: blur(24px);
+      border-radius: 9999px;
+      padding: 0.45rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      user-select: none;
+    }
+    .canva-inspector.hidden {
+      display: none !important;
+    }
+
+    /* Inspector Controls */
+    .ci-drag-handle {
+      cursor: grab;
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .ci-drag-handle:active {
+      cursor: grabbing;
+      background: #0284c7;
+      color: #ffffff;
+    }
+
+    .ci-group {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-right: 1px solid rgba(148, 163, 184, 0.2);
+      padding-right: 0.65rem;
+    }
+
+    /* Color Palette Dots */
+    .ci-color-dot {
+      width: 1.15rem;
+      height: 1.15rem;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .ci-color-dot:hover {
+      transform: scale(1.25);
+      border-color: #ffffff;
+    }
+
+    /* Mini Buttons */
+    .ci-btn {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #e2e8f0;
+      padding: 0.25rem 0.55rem;
+      border-radius: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .ci-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+    .ci-btn-danger:hover {
+      background: rgba(225, 29, 72, 0.3);
+      border-color: #f43f5e;
+      color: #fb7185;
+    }
+
+    /* Opacity Slider */
+    .ci-slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+    .ci-slider {
+      width: 60px;
+      cursor: pointer;
+      accent-color: #38bdf8;
+    }
+
+    /* Corner Resize Handle */
+    .canva-resize-handle {
+      position: absolute;
+      bottom: -6px;
+      right: -6px;
+      width: 14px;
+      height: 14px;
+      background: #38bdf8;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      cursor: nwse-resize;
+      z-index: 100;
+      display: none;
+    }
+    body.edit-mode-active .canva-selected .canva-resize-handle {
+      display: block;
+    }
+
+    /* Custom Added Shapes */
+    .custom-shape {
+      position: relative;
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .custom-shape:hover {
+      outline: 1.5px dashed rgba(56, 189, 248, 0.6);
+    }
+
+    .custom-text-box {
+      font-size: 1.15rem;
+      color: #f8fafc;
+      padding: 0.75rem 1.25rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 0.75rem;
+      backdrop-filter: blur(16px);
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    .custom-glass-box {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      min-width: 260px;
+      min-height: 120px;
+    }
+
+    .custom-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+      width: 100%;
+      max-width: 600px;
+      margin: 1rem 0;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+    }
+
+    /* Add Element Dropdown Menu */
+    .add-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .add-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 0.5rem;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(20px);
+      z-index: 100001;
+      min-width: 180px;
+    }
+    .add-dropdown-menu.hidden {
+      display: none;
+    }
+    .add-item-btn {
+      background: transparent;
+      border: none;
+      color: #e2e8f0;
+      padding: 0.5rem 0.85rem;
+      border-radius: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .add-item-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+    }
+
+
+    /* ========================================================
+       ON-CARD ACTION CONTROLS (DELETE, MOVE, DRAG, COLOR)
+       ======================================================== */
+    .metric-card {
+      position: relative !important;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease !important;
+    }
+
+    /* Action bar pinned to top-right of each card */
+    .card-action-bar {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      display: none;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 9999px;
+      padding: 0.25rem 0.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      z-index: 50;
+      user-select: none;
+    }
+    body.edit-mode-active .card-action-bar {
+      display: flex !important;
+    }
+
+    .cab-btn {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: #e2e8f0;
+      width: 1.65rem;
+      height: 1.65rem;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      line-height: 1;
+    }
+    .cab-btn:hover {
+      background: rgba(56, 189, 248, 0.3);
+      border-color: #38bdf8;
+      color: #38bdf8;
+      transform: scale(1.15);
+    }
+    .cab-btn-del:hover {
+      background: rgba(225, 29, 72, 0.3);
+      border-color: #f43f5e;
+      color: #fb7185;
+    }
+    .cab-btn-drag {
+      cursor: grab;
+      color: #38bdf8;
+    }
+    .cab-btn-drag:active {
+      cursor: grabbing;
+      background: #0284c7;
+      color: white;
+    }
+
+    /* Add Card Button under Grid */
+    .grid-add-card-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 2px dashed rgba(56, 189, 248, 0.5);
+      border-radius: 1.25rem;
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      min-height: 140px;
+    }
+    body.edit-mode-active .grid-add-card-btn {
+      display: flex !important;
+    }
+    .grid-add-card-btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: #38bdf8;
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    }
+
+    /* Grid Auto Sizing based on visible cards */
+    .metrics-grid {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+      gap: 1.5rem !important;
+      max-width: 1240px !important;
+      width: 100% !important;
+      transition: all 0.3s ease !important;
+    }
+
+
+    /* ========================================================
+       PERFECT ON-CARD CONTROLS & UNDO SYSTEM
+       ======================================================== */
+    .metric-card {
+      position: relative !important;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease !important;
+      will-change: transform;
+    }
+
+    /* Prominent Action Bar pinned on top-right of each card */
+    .card-action-bar {
+      position: absolute;
+      top: 0.65rem;
+      right: 0.65rem;
+      display: none;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1.5px solid #38bdf8;
+      border-radius: 9999px;
+      padding: 0.3rem 0.65rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.4);
+      backdrop-filter: blur(16px);
+      z-index: 100;
+      user-select: none;
+    }
+    body.edit-mode-active .card-action-bar {
+      display: flex !important;
+    }
+
+    .cab-btn {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: #f8fafc;
+      padding: 0.25rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      line-height: 1;
+    }
+    .cab-btn:hover {
+      background: rgba(56, 189, 248, 0.35);
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: scale(1.08);
+    }
+    .cab-btn-del {
+      background: rgba(225, 29, 72, 0.35);
+      border-color: #fb7185;
+      color: #ffffff;
+    }
+    .cab-btn-del:hover {
+      background: #e11d48;
+      border-color: #ffffff;
+      color: #ffffff;
+      transform: scale(1.1);
+      box-shadow: 0 0 12px rgba(225, 29, 72, 0.7);
+    }
+    .cab-btn-drag {
+      cursor: grab;
+      background: rgba(2, 132, 199, 0.4);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+    .cab-btn-drag:active {
+      cursor: grabbing;
+      background: #0284c7;
+      color: #ffffff;
+    }
+
+    /* Card sent to bottom row (as drawn by user) */
+    .metric-card.card-bottom-row {
+      grid-column: 1 / -1 !important;
+      max-width: 650px !important;
+      margin: 1.5rem auto 0 auto !important;
+      width: 100% !important;
+    }
+
+    /* Dragging state */
+    .metric-card.is-dragging {
+      z-index: 1000 !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.8) !important;
+      cursor: grabbing !important;
+    }
+
+    /* Undo Button styling */
+    .btn-tb-undo {
+      background: rgba(147, 51, 234, 0.25) !important;
+      border-color: #c084fc !important;
+      color: #e9d5ff !important;
+    }
+    .btn-tb-undo:hover {
+      background: #9333ea !important;
+      color: #ffffff !important;
+      transform: scale(1.05);
+    }
+
+
+    /* ========================================================
+       RICH TEXT FORMATTING TOOLBAR (WORD / CANVA STYLE)
+       ======================================================== */
+    .text-format-toolbar {
+      position: fixed;
+      z-index: 100005;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1.5px solid #38bdf8;
+      border-radius: 9999px;
+      padding: 0.35rem 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(56, 189, 248, 0.4);
+      backdrop-filter: blur(20px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      user-select: none;
+    }
+    .text-format-toolbar.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px) scale(0.95);
+    }
+
+    .tft-group {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      border-right: 1px solid rgba(148, 163, 184, 0.25);
+      padding-right: 0.5rem;
+    }
+
+    .tft-btn {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: #f8fafc;
+      width: 1.85rem;
+      height: 1.85rem;
+      border-radius: 0.35rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      line-height: 1;
+    }
+    .tft-btn:hover {
+      background: rgba(56, 189, 248, 0.3);
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: scale(1.08);
+    }
+    .tft-btn.active {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+
+    /* Text Color Dots */
+    .tft-color-dot {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .tft-color-dot:hover {
+      transform: scale(1.25);
+      border-color: #ffffff;
+    }
+
+    /* Native Color Input wrapper */
+    .tft-custom-color-wrap {
+      position: relative;
+      width: 1.35rem;
+      height: 1.35rem;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1.5px solid #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+    }
+    .tft-custom-color-wrap input[type="color"] {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 40px;
+      height: 40px;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+
+    /* ========================================================
+       TRUE ZERO-NOISE CINEMA FULLSCREEN MODE
+       ======================================================== */
+    .hud-top {
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* When Fullscreen is Active: 100% Clean Cinema Immersion */
+    body.is-fullscreen .hud-top,
+    body.is-fullscreen .hud-bottom,
+    body.is-fullscreen .card-action-bar,
+    body.is-fullscreen .edit-toolbar,
+    body.is-fullscreen .canva-inspector,
+    body.is-fullscreen .text-format-toolbar,
+    body.is-fullscreen .grid-add-card-btn {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    /* When mouse moves in fullscreen: briefly reveal controls for presenter */
+    body.is-fullscreen.show-controls .hud-top,
+    body.is-fullscreen.show-controls .hud-bottom {
+      opacity: 0.92 !important;
+      pointer-events: auto !important;
+    }
+
+    /* Keep edit-mode-specific buttons ALWAYS hidden in fullscreen even when mouse moves */
+    body.is-fullscreen .card-action-bar,
+    body.is-fullscreen .edit-toolbar,
+    body.is-fullscreen .grid-add-card-btn,
+    body.is-fullscreen .canva-inspector,
+    body.is-fullscreen .text-format-toolbar {
+      display: none !important;
+    }
+
+    /* Fix any remaining opacity 0.1 autohide */
+    .hud-bottom.autohide {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Moving Sunlight Caustics -->
+  <div class="ocean-caustics"></div>
+
+  <!-- Layer 0: Hollywood 8K Masterwork Backgrounds -->
+  <div id="bg-surface" class="bg-layer active" style="background-image: url('assets/surface.jpg');"></div>
+  <div id="bg-coral" class="bg-layer" style="background-image: url('assets/coral.jpg');"></div>
+  <div id="bg-abyss" class="bg-layer" style="background-image: url('assets/abyss.jpg');"></div>
+
+  <!-- Layer 2: WebGL 3D Depth Particle Canvas -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Layer 3: Ambient Micro-Bubbles Canvas -->
+  <canvas id="marine-canvas"></canvas>
+
+  <!-- Layer 4: Soft Vignette -->
+  <div class="cinematic-vignette"></div>
+
+  <!-- Layer 10: Presentation Stage -->
+  <main class="stage">
+    
+    <!-- Top HUD -->
+    <header class="hud-top">
+      <span class="depth-badge" id="depth-display">DEPTH: 0M • SUNLIGHT SURFACE</span>
+      <div class="hud-top-right">
+        <button id="btn-edit-mode" class="btn-edit-toggle" title="Phím tắt: E">✏️ Chỉnh sửa nội dung [E]</button>
+        <a href="speaker_portal.html" class="portal-link" target="_blank">📱 Speaker Portal & Timer</a>
+      </div>
+    </header>
+
+    <!-- Floating Edit Mode Toolbar -->
+    <div id="edit-toolbar" class="edit-toolbar hidden">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="edit-toolbar-title">✏️ Chế độ sửa: Click vào chữ để gõ • Canva Live Deck</span>
+        <span id="cloud-status-badge" style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem; font-weight:600; background:rgba(16,185,129,0.15); border:1px solid #10b981; color:#34d399; padding:3px 10px; border-radius:14px;">
+          <span style="width:7px; height:7px; border-radius:50%; background:#10b981; display:inline-block;"></span>
+          <span id="cloud-status-text">Đã đồng bộ Cloud</span>
+        </span>
+      </div>
+      <div class="edit-toolbar-actions">
+        <!-- Add Element Dropdown -->
+        <div class="add-dropdown">
+          <button id="btn-add-dropdown" class="btn-tb" style="background: rgba(56,189,248,0.2); border-color:#38bdf8; color:#38bdf8;">
+            ➕ Thêm đối tượng ▾
+          </button>
+          <div id="add-menu" class="add-dropdown-menu hidden">
+            <button class="add-item-btn" onclick="addNewElement('card')">📊 Thêm Thẻ số liệu</button>
+            <button class="add-item-btn" onclick="addNewElement('textbox')">📝 Thêm Hộp chữ tự do</button>
+            <button class="add-item-btn" onclick="addNewElement('glassbox')">🔲 Thêm Khung kính mờ</button>
+            <button class="add-item-btn" onclick="addNewElement('pill')">🏷️ Thêm Huy hiệu</button>
+            <button class="add-item-btn" onclick="addNewElement('divider')">➖ Thêm Đường kẻ sáng</button>
+          </div>
+        </div>
+
+        <button id="btn-undo" class="btn-tb btn-tb-undo" onclick="performUndo()" title="Hoàn tác thao tác vừa rồi (Ctrl+Z)">↩️ Hoàn tác</button>
+        <button id="btn-save-edits" class="btn-tb btn-tb-save">☁️ Lưu & Đồng bộ cả nhóm</button>
+        <button id="btn-download-html" class="btn-tb">📥 Tải file HTML mới</button>
+        <button id="btn-copy-json" class="btn-tb">📋 Sao chép dữ liệu</button>
+        <button id="btn-reset-edits" class="btn-tb btn-tb-danger">🔄 Khôi phục gốc</button>
+        <button id="btn-close-edit" class="btn-tb btn-tb-close" title="Đóng chế độ sửa [Esc]">✖</button>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Floating Rich Text Formatting Toolbar (Word / Canva Style) -->
+    <div id="text-format-toolbar" class="text-format-toolbar hidden">
+      <!-- Basic Text Styles (Bold, Italic, Underline, Strike) -->
+      <div class="tft-group">
+        <button class="tft-btn" onmousedown="applyTextFormat(event, 'bold')" title="In đậm [Ctrl+B]"><b>B</b></button>
+        <button class="tft-btn" onmousedown="applyTextFormat(event, 'italic')" title="In nghiêng [Ctrl+I]"><i>I</i></button>
+        <button class="tft-btn" onmousedown="applyTextFormat(event, 'underline')" title="Gạch chân [Ctrl+U]"><u>U</u></button>
+        <button class="tft-btn" onmousedown="applyTextFormat(event, 'strikeThrough')" title="Gạch ngang"><s>S</s></button>
+      </div>
+
+      <!-- Text Color Palette -->
+      <div class="tft-group" title="Đổi màu chữ">
+        <span class="tft-color-dot" style="background:#ffffff;" onmousedown="applyTextColor(event, '#ffffff')" title="Màu Trắng"></span>
+        <span class="tft-color-dot" style="background:#38bdf8;" onmousedown="applyTextColor(event, '#38bdf8')" title="Xanh Cyan"></span>
+        <span class="tft-color-dot" style="background:#fbbf24;" onmousedown="applyTextColor(event, '#fbbf24')" title="Vàng Gold"></span>
+        <span class="tft-color-dot" style="background:#34d399;" onmousedown="applyTextColor(event, '#34d399')" title="Xanh Ngọc"></span>
+        <span class="tft-color-dot" style="background:#c084fc;" onmousedown="applyTextColor(event, '#c084fc')" title="Tím Neon"></span>
+        <span class="tft-color-dot" style="background:#fb7185;" onmousedown="applyTextColor(event, '#fb7185')" title="Đỏ San Hô"></span>
+        <!-- Custom Color Picker Circle -->
+        <div class="tft-custom-color-wrap" title="Chọn màu chữ tùy ý">
+          <input type="color" onchange="applyTextColor(null, this.value)">
+        </div>
+      </div>
+
+      <!-- Text Highlight Color (Nền chữ) -->
+      <div class="tft-group" title="Tô màu nền chữ (Highlight)">
+        <span style="font-size:0.75rem; color:#94a3b8; margin-right:0.2rem;">Nền:</span>
+        <span class="tft-color-dot" style="background:rgba(251,191,36,0.4); border-color:#fbbf24;" onmousedown="applyTextHighlight(event, 'rgba(251,191,36,0.4)')" title="Highlight Vàng"></span>
+        <span class="tft-color-dot" style="background:rgba(56,189,248,0.4); border-color:#38bdf8;" onmousedown="applyTextHighlight(event, 'rgba(56,189,248,0.4)')" title="Highlight Xanh"></span>
+        <span class="tft-color-dot" style="background:rgba(225,29,72,0.4); border-color:#fb7185;" onmousedown="applyTextHighlight(event, 'rgba(225,29,72,0.4)')" title="Highlight Đỏ"></span>
+        <span class="tft-color-dot" style="background:transparent; border-color:#64748b;" onmousedown="applyTextHighlight(event, 'transparent')" title="Xóa màu nền"></span>
+      </div>
+
+      <!-- Text Size & Alignment -->
+      <div class="tft-group">
+        <button class="tft-btn" onmousedown="changeSelectedFontSize(event, 2)" title="Tăng cỡ chữ">A+</button>
+        <button class="tft-btn" onmousedown="changeSelectedFontSize(event, -2)" title="Giảm cỡ chữ">A-</button>
+      </div>
+
+      <!-- Clear Formatting -->
+      <button class="tft-btn" onmousedown="applyTextFormat(event, 'removeFormat')" title="Xóa toàn bộ định dạng về mặc định">🧹</button>
+    </div>
+
+
+    <!-- Slide Viewport (12 Structured Slides: 3 Targets x 4 Questions) -->
+    
+    <!-- Floating Mini-Canva Inspector Bar -->
+    <div id="canva-inspector" class="canva-inspector hidden">
+      <!-- Drag Handle -->
+      <span class="ci-drag-handle" id="ci-drag" title="Bấm giữ và kéo để di chuyển vị trí">✥ Di chuyển</span>
+
+      <!-- Color Palette -->
+      <div class="ci-group" title="Đổi màu viền & điểm nhấn">
+        <span class="ci-color-dot" style="background:#38bdf8;" onclick="setElementColor('#38bdf8', 'border-cyan')" title="Xanh Cyan"></span>
+        <span class="ci-color-dot" style="background:#34d399;" onclick="setElementColor('#34d399', 'border-emerald')" title="Xanh Ngọc Lục Bảo"></span>
+        <span class="ci-color-dot" style="background:#c084fc;" onclick="setElementColor('#c084fc', 'border-blue')" title="Tím Vực Sâu"></span>
+        <span class="ci-color-dot" style="background:#fbbf24;" onclick="setElementColor('#fbbf24', 'border-gold')" title="Vàng Hoàng Hôn"></span>
+        <span class="ci-color-dot" style="background:#fb7185;" onclick="setElementColor('#fb7185', 'border-rose')" title="Đỏ San Hô"></span>
+        <span class="ci-color-dot" style="background:rgba(15,23,42,0.85); border-color:#94a3b8;" onclick="setElementColor('rgba(15,23,42,0.85)', '')" title="Kính Mờ Tối"></span>
+      </div>
+
+      <!-- Opacity Slider -->
+      <div class="ci-group ci-slider-wrap" title="Độ mờ kính trong suốt">
+        <span>Độ mờ:</span>
+        <input type="range" class="ci-slider" id="ci-opacity" min="20" max="100" value="85" oninput="setElementOpacity(this.value)">
+      </div>
+
+      <!-- Font Sizing -->
+      <div class="ci-group" title="Cỡ chữ">
+        <button class="ci-btn" onclick="adjustFontSize(2)" title="Tăng cỡ chữ">A+</button>
+        <button class="ci-btn" onclick="adjustFontSize(-2)" title="Giảm cỡ chữ">A-</button>
+      </div>
+
+      <!-- Alignment -->
+      <div class="ci-group" title="Căn lề">
+        <button class="ci-btn" onclick="setElementAlign('left')" title="Căn trái">⬅</button>
+        <button class="ci-btn" onclick="setElementAlign('center')" title="Căn giữa">⬌</button>
+        <button class="ci-btn" onclick="setElementAlign('right')" title="Căn phải">➡</button>
+      </div>
+
+      <!-- Delete Element -->
+      <button class="ci-btn ci-btn-danger" onclick="deleteSelectedElement()" title="Xóa đối tượng này">🗑️ Xóa</button>
+
+      <!-- Close Inspector -->
+      <button class="ci-btn" onclick="deselectElement()" style="border-radius:50%; width:1.5rem; height:1.5rem; padding:0;">✖</button>
+    </div>
+
+    <div class="slide-viewport">
+      
+      <section class="slide active" data-depth="0M • SUNLIGHT SURFACE" data-bg="bg-surface" data-index="0">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.1</span>
+          <span class="pill pill-question">QUESTION 1 • TARGET AIM</span>
+          <span class="pill pill-speaker">Speaker 1</span>
+        </div>
+        <h1 class="slide-title">Target 14.1: Eliminate Marine Pollution</h1>
+        <p class="slide-subtitle">Halting Land-Based Agricultural Runoff and Plastic Influx by 2025</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">ORIGIN POINT</div>
+            <div class="card-stat">80% Land-Based</div>
+            <div class="card-desc">Massive municipal waste, toxic chemicals, and fertilizers flowing down river basins.</div>
+          </div>
+
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">GLOBAL MANDATE</div>
+            <div class="card-stat">Target 2025</div>
+            <div class="card-desc">Official UN deadline to prevent and significantly reduce marine pollution of all kinds.</div>
+          </div>
+
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">PRIMARY VECTORS</div>
+            <div class="card-stat">N, P & Plastics</div>
+            <div class="card-desc">Excess reactive nitrogen, phosphorus, and macro to microplastics choking marine life.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="100M • SURFACE MIXED LAYER" data-bg="bg-surface" data-index="1">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.1</span>
+          <span class="pill pill-question">QUESTION 2 • OFFICIAL INDICATORS</span>
+          <span class="pill pill-speaker">Speaker 1</span>
+        </div>
+        <h1 class="slide-title">Indicator 14.1.1: Dual Monitoring Pathways</h1>
+        <p class="slide-subtitle">Tracking Invisible Fertilizer Nutrients and Visible Solid Plastic Accumulation</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">SUB-INDICATOR 14.1.1(a)</div>
+            <div class="card-stat">ICEP Index</div>
+            <div class="card-desc">Index of Coastal Eutrophication Potential monitoring nitrogen and phosphorus chemical runoff.</div>
+          </div>
+
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">SUB-INDICATOR 14.1.1(b)</div>
+            <div class="card-stat">Plastic Density</div>
+            <div class="card-desc">Mass and particle count of macro and micro-plastics per km² of seawater and shoreline.</div>
+          </div>
+
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">ECOLOGICAL IMPACT</div>
+            <div class="card-stat">500+ Dead Zones</div>
+            <div class="card-desc">Hypoxic ocean dead zones worldwide stripped of dissolved oxygen by nutrient-fed algal blooms.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="180M • COASTAL SHELF" data-bg="bg-surface" data-index="2">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.1</span>
+          <span class="pill pill-question">QUESTION 3 • MEASUREMENT METHODS</span>
+          <span class="pill pill-speaker">Speaker 2</span>
+        </div>
+        <h1 class="slide-title">Measuring Pollution: Orbit to Shoreline</h1>
+        <p class="slide-subtitle">Satellite Remote Sensing Combined with Standardized Coastal Transects</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">SATELLITE SURVEILLANCE</div>
+            <div class="card-stat">MODIS & Sentinel</div>
+            <div class="card-desc">ESA Sentinel-3 & NASA orbiters scan ocean optical anomalies to detect Chlorophyll-a spikes.</div>
+          </div>
+
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">COASTAL TRANSECTS</div>
+            <div class="card-stat">100m Shoreline</div>
+            <div class="card-desc">Standardized beach surveys categorizing, weighing, and geolocating macroplastic debris.</div>
+          </div>
+
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">SURFACE TRAWLING</div>
+            <div class="card-stat">Manta Nets (333µm)</div>
+            <div class="card-desc">Fine mesh surface trawls capturing microplastics for FTIR and Raman laboratory spectroscopy.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="200M • SUNLIGHT BOUNDARY" data-bg="bg-surface" data-index="3">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.1</span>
+          <span class="pill pill-question">QUESTION 4 • INSTITUTIONS & GOVERNANCE</span>
+          <span class="pill pill-speaker">Speaker 2</span>
+        </div>
+        <h1 class="slide-title">Governance 14.1: Treaties & Custodianship</h1>
+        <p class="slide-subtitle">Global Coordination Under UNEP and the Binding Global Plastics Treaty</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">GLOBAL CUSTODIAN</div>
+            <div class="card-stat">UNEP</div>
+            <div class="card-desc">United Nations Environment Programme standardizes national reporting methodologies.</div>
+          </div>
+
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">LEGALLY BINDING PACT</div>
+            <div class="card-stat">INC Plastics Treaty</div>
+            <div class="card-desc">Historic Intergovernmental Negotiating Committee treaty tackling the entire plastic lifecycle.</div>
+          </div>
+
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">MARITIME LAW</div>
+            <div class="card-stat">MARPOL Annex V</div>
+            <div class="card-desc">IMO convention strictly banning commercial vessel dumping of plastics and garbage at sea.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="350M • UPPER REEF BIOME" data-bg="bg-coral" data-index="4">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.2</span>
+          <span class="pill pill-question">QUESTION 1 • TARGET AIM</span>
+          <span class="pill pill-speaker">Speaker 3</span>
+        </div>
+        <h1 class="slide-title">Target 14.2: Protect & Restore Ecosystems</h1>
+        <p class="slide-subtitle">Shifting from Sectoral Silos to Holistic Ecosystem-Based Management (EBM)</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">CORE STRATEGY</div>
+            <div class="card-stat">EBM Approach</div>
+            <div class="card-desc">Ecosystem-Based Management: regulating human pressures across whole integrated biomes.</div>
+          </div>
+
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">CRITICAL HABITATS</div>
+            <div class="card-stat">Reefs & Mangroves</div>
+            <div class="card-desc">Active conservation of coastal storm buffers, blue carbon sinks, and larval fish nurseries.</div>
+          </div>
+
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">TIMELINE MANDATE</div>
+            <div class="card-stat">Urgent Catch-up</div>
+            <div class="card-desc">Target 14.2 held an early 2020 deadline; national implementations are in aggressive acceleration.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="500M • LIVING CORAL REEF" data-bg="bg-coral" data-index="5">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.2</span>
+          <span class="pill pill-question">QUESTION 2 • OFFICIAL INDICATORS</span>
+          <span class="pill pill-speaker">Speaker 3</span>
+        </div>
+        <h1 class="slide-title">Indicator 14.2.1: Management on Paper</h1>
+        <p class="slide-subtitle">National Policy Adoption vs. On-the-Ground Ecological Reality</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">UN INDICATOR 14.2.1</div>
+            <div class="card-stat">Policy Adoption</div>
+            <div class="card-desc">Number of countries adopting ecosystem-based approaches to manage marine areas.</div>
+          </div>
+
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">SPATIAL INSTRUMENTS</div>
+            <div class="card-stat">MSP & ICZM</div>
+            <div class="card-desc">Marine Spatial Planning and Integrated Coastal Zone Management national legal decrees.</div>
+          </div>
+
+          <div class="metric-card border-rose">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">CRITICAL LIMITATION</div>
+            <div class="card-stat">Paper Parks</div>
+            <div class="card-desc">Indicator measures enacted paperwork—it does not prove coral recovery or enforced patrols.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="700M • MESOPELAGIC REEF WALL" data-bg="bg-coral" data-index="6">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.2</span>
+          <span class="pill pill-question">QUESTION 3 • MEASUREMENT METHODS</span>
+          <span class="pill pill-speaker">Speaker 4</span>
+        </div>
+        <h1 class="slide-title">Measuring Ecology: Sensors, eDNA & Sonar</h1>
+        <p class="slide-subtitle">Direct Biological Auditing Beyond Bureaucratic Self-Reporting</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">REEF HEALTH NETWORK</div>
+            <div class="card-stat">GCRMN Censuses</div>
+            <div class="card-desc">Global Coral Reef Monitoring Network standardizing live hard coral cover and bleaching rates.</div>
+          </div>
+
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">GENOMIC SAMPLING</div>
+            <div class="card-stat">eDNA Sequencing</div>
+            <div class="card-desc">Filtering seawater DNA to profile all fish species present without destructive netting.</div>
+          </div>
+
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">ACOUSTIC BATHYMETRY</div>
+            <div class="card-stat">Multibeam Sonar</div>
+            <div class="card-desc">3D acoustic mapping of benthic rugosity, structural reef complexity, and seagrass meadows.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="900M • TWILIGHT ENTRANCE" data-bg="bg-coral" data-index="7">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.2</span>
+          <span class="pill pill-question">QUESTION 4 • INSTITUTIONS & GOVERNANCE</span>
+          <span class="pill pill-speaker">Speaker 4</span>
+        </div>
+        <h1 class="slide-title">Governance 14.2: 30x30 & The High Seas</h1>
+        <p class="slide-subtitle">The Kunming-Montreal Framework and the Historic BBNJ High Seas Treaty</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">GLOBAL BIODIVERSITY PACT</div>
+            <div class="card-stat">30x30 Target</div>
+            <div class="card-desc">Kunming-Montreal GBF Target 3: legally designate 30% of global oceans as MPAs by 2030.</div>
+          </div>
+
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">INTERNATIONAL WATERS</div>
+            <div class="card-stat">BBNJ Treaty</div>
+            <div class="card-desc">Biodiversity Beyond National Jurisdiction: first UN instrument to enforce high-seas protected zones.</div>
+          </div>
+
+          <div class="metric-card border-emerald">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">LEAD AGENCIES</div>
+            <div class="card-stat">UNEP / CBD</div>
+            <div class="card-desc">UNEP harmonizes compliance with the Convention on Biological Diversity Secretariat.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="1,200M • BATHYPELAGIC ENTRANCE" data-bg="bg-abyss" data-index="8">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.3</span>
+          <span class="pill pill-question">QUESTION 1 • TARGET AIM</span>
+          <span class="pill pill-speaker">Speaker 5</span>
+        </div>
+        <h1 class="slide-title">Target 14.3: Minimize Ocean Acidification</h1>
+        <p class="slide-subtitle">Confronting the Severe Chemical Cost of Planetary Carbon Absorption</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">PLANETARY SINK</div>
+            <div class="card-stat">25% CO2 Absorbed</div>
+            <div class="card-desc">Oceans absorb a quarter of anthropogenic carbon emissions, creating carbonic acid (H2CO3).</div>
+          </div>
+
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">ACIDITY SURGE</div>
+            <div class="card-stat">+30% Acidity</div>
+            <div class="card-desc">A 0.1 unit drop in global surface seawater pH represents a 30% surge in hydrogen ion (H+) concentration.</div>
+          </div>
+
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">CALCIFIER CRISIS</div>
+            <div class="card-stat">Corrosive Waters</div>
+            <div class="card-desc">Depletion of carbonate ions (CO3²⁻) dissolves shells of pteropods, shellfish, and coral skeletons.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="1,800M • MID-BATHYPELAGIC" data-bg="bg-abyss" data-index="9">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.3</span>
+          <span class="pill pill-question">QUESTION 2 • OFFICIAL INDICATORS</span>
+          <span class="pill pill-speaker">Speaker 5</span>
+        </div>
+        <h1 class="slide-title">Indicator 14.3.1: Precision Marine Chemistry</h1>
+        <p class="slide-subtitle">Average Acidity (pH) Measured at Representative Sampling Stations</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">PRIMARY CHEMICAL METRIC</div>
+            <div class="card-stat">Total pH Scale (pHT)</div>
+            <div class="card-desc">Seawater pH measured continuously to high scientific precision of ±0.002 units.</div>
+          </div>
+
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">CARBON SYSTEM PARTNERS</div>
+            <div class="card-stat">DIC & Alkalinity</div>
+            <div class="card-desc">Reporting Total Dissolved Inorganic Carbon and Total Alkalinity alongside pH for full thermodynamic equations.</div>
+          </div>
+
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">SATURATION HORIZON</div>
+            <div class="card-stat">Ω Aragonite</div>
+            <div class="card-desc">Tracking shoaling aragonite saturation depth where deep ocean currents become corrosive to bone.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="2,200M • LOWER BATHYPELAGIC" data-bg="bg-abyss" data-index="10">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.3</span>
+          <span class="pill pill-question">QUESTION 3 • MEASUREMENT METHODS</span>
+          <span class="pill pill-speaker">Speaker 6</span>
+        </div>
+        <h1 class="slide-title">Measuring Chemistry: Autonomous Robots & Arrays</h1>
+        <p class="slide-subtitle">Autonomous Biogeochemical Profiling Across the Global Water Column</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">ROBOTIC PROFILERS</div>
+            <div class="card-stat">BGC-Argo Floats</div>
+            <div class="card-desc">Autonomous robotic floats equipped with ISFET pH sensors diving continuously to 2,000 meters.</div>
+          </div>
+
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">SHIPBOARD PURITY</div>
+            <div class="card-stat">m-Cresol Purple</div>
+            <div class="card-desc">Purified dye spectrophotometry aboard research vessels calibrated against Certified Reference Materials.</div>
+          </div>
+
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">GLOBAL NETWORK</div>
+            <div class="card-stat">GOA-ON Network</div>
+            <div class="card-desc">Global Ocean Acidification Observing Network coordinating thousands of buoys and ships across 100+ nations.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-depth="2,500M • ABYSSAL FLOOR" data-bg="bg-abyss" data-index="11">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">TARGET 14.3</span>
+          <span class="pill pill-question">QUESTION 4 • INSTITUTIONS & GOVERNANCE</span>
+          <span class="pill pill-speaker">Speaker 6</span>
+        </div>
+        <h1 class="slide-title">Governance 14.3: UNESCO-IOC & Global Action</h1>
+        <p class="slide-subtitle">Bridging the North-South Data Divide and Uniting All Three Targets</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">CUSTODIAN LEAD</div>
+            <div class="card-stat">UNESCO-IOC</div>
+            <div class="card-desc">Intergovernmental Oceanographic Commission aggregates and publishes the global SDG 14.3.1 data portal.</div>
+          </div>
+
+          <div class="metric-card border-blue">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">CAPACITY EQUITY</div>
+            <div class="card-stat">OA in a Box</div>
+            <div class="card-desc">Deploying standardized low-cost chemical laboratory kits to Small Island Developing States (SIDS).</div>
+          </div>
+
+          <div class="metric-card border-cyan">
+          <!-- Action Controls for This Card -->
+          <div class="card-action-bar">
+            <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+            <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+            <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+            <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+            <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+            <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+          </div>
+            <div class="card-label">ROOT REMEDY</div>
+            <div class="card-stat">UNFCCC Paris Pact</div>
+            <div class="card-desc">Ocean acidification has no local engineering cure—its only solution is reducing global fossil emissions.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom HUD Navigation -->
+    <footer class="hud-bottom">
+      
+      <!-- Direct Slide Jump Bar -->
+      <div class="slide-dots-bar">
+        <button class="dot-btn active" onclick="jumpToSlide(0)" title="Slide 01: TARGET 14.1">01</button>
+<button class="dot-btn" onclick="jumpToSlide(1)" title="Slide 02: TARGET 14.1">02</button>
+<button class="dot-btn" onclick="jumpToSlide(2)" title="Slide 03: TARGET 14.1">03</button>
+<button class="dot-btn" onclick="jumpToSlide(3)" title="Slide 04: TARGET 14.1">04</button>
+<button class="dot-btn" onclick="jumpToSlide(4)" title="Slide 05: TARGET 14.2">05</button>
+<button class="dot-btn" onclick="jumpToSlide(5)" title="Slide 06: TARGET 14.2">06</button>
+<button class="dot-btn" onclick="jumpToSlide(6)" title="Slide 07: TARGET 14.2">07</button>
+<button class="dot-btn" onclick="jumpToSlide(7)" title="Slide 08: TARGET 14.2">08</button>
+<button class="dot-btn" onclick="jumpToSlide(8)" title="Slide 09: TARGET 14.3">09</button>
+<button class="dot-btn" onclick="jumpToSlide(9)" title="Slide 10: TARGET 14.3">10</button>
+<button class="dot-btn" onclick="jumpToSlide(10)" title="Slide 11: TARGET 14.3">11</button>
+<button class="dot-btn" onclick="jumpToSlide(11)" title="Slide 12: TARGET 14.3">12</button>
+      </div>
+
+      <!-- Arrow Controls & Counter -->
+      <div class="nav-controls">
+        <button class="btn-nav" id="btn-prev" title="Previous Slide (ArrowLeft / PageUp)">‹</button>
+        <div class="slide-counter"><span id="curr-slide">01</span> / 12</div>
+        <button class="btn-nav" id="btn-next" title="Next Slide (ArrowRight / Space / PageDown)">›</button>
+      </div>
+
+      <!-- Fullscreen Action Button -->
+      <div>
+        <button class="btn-action" id="btn-fullscreen" title="Toggle Fullscreen (F)">⛶ Toàn màn hình</button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Three.js (Isolated with Fallback) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+    // ==========================================
+    // 1. THREE.JS 3D PARTICLE ENGINE
+    // ==========================================
+    let particleMaterial = null;
+    try {
+      if (typeof THREE !== 'undefined') {
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        camera.position.z = 50;
+
+        // Circular soft particle texture
+        const pCanvas = document.createElement('canvas');
+        pCanvas.width = 64; pCanvas.height = 64;
+        const pCtx = pCanvas.getContext('2d');
+        const gradient = pCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+        gradient.addColorStop(0, 'rgba(255,255,255,1)');
+        gradient.addColorStop(0.3, 'rgba(255,255,255,0.7)');
+        gradient.addColorStop(0.8, 'rgba(255,255,255,0.15)');
+        gradient.addColorStop(1, 'rgba(255,255,255,0)');
+        pCtx.fillStyle = gradient;
+        pCtx.beginPath();
+        pCtx.arc(32, 32, 32, 0, Math.PI * 2);
+        pCtx.fill();
+        const particleTexture = new THREE.CanvasTexture(pCanvas);
+
+        const particleCount = 1200;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const velocities = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount * 3; i += 3) {
+          positions[i] = (Math.random() - 0.5) * 120;
+          positions[i + 1] = (Math.random() - 0.5) * 80;
+          positions[i + 2] = (Math.random() - 0.5) * 60;
+
+          velocities[i] = (Math.random() - 0.5) * 0.015;
+          velocities[i + 1] = Math.random() * 0.025 + 0.008;
+          velocities[i + 2] = (Math.random() - 0.5) * 0.015;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        particleMaterial = new THREE.PointsMaterial({
+          size: 2.2,
+          map: particleTexture,
+          color: 0x38bdf8,
+          transparent: true,
+          opacity: 0.65,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false
+        });
+
+        const particles = new THREE.Points(geometry, particleMaterial);
+        scene.add(particles);
+
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+          mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+          mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        function animate() {
+          requestAnimationFrame(animate);
+          const pos = geometry.attributes.position.array;
+          for (let i = 0; i < particleCount * 3; i += 3) {
+            pos[i] += velocities[i];
+            pos[i + 1] += velocities[i + 1];
+            pos[i + 2] += velocities[i + 2];
+
+            if (pos[i + 1] > 40) pos[i + 1] = -40;
+            if (pos[i] > 60) pos[i] = -60;
+            if (pos[i] < -60) pos[i] = 60;
+          }
+          geometry.attributes.position.needsUpdate = true;
+
+          camera.position.x += (mouseX * 4 - camera.position.x) * 0.04;
+          camera.position.y += (mouseY * 4 - camera.position.y) * 0.04;
+          camera.lookAt(scene.position);
+
+          renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      }
+    } catch (e) {
+      console.warn('Three.js initialization:', e);
+    }
+
+    // ==========================================
+    // 2. SLIDE NAVIGATION & VISUAL TRANSITIONS
+    // ==========================================
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot-btn');
+    const bgLayers = document.querySelectorAll('.bg-layer');
+    const depthDisplay = document.getElementById('depth-display');
+    const currSlideDisplay = document.getElementById('curr-slide');
+    const btnNext = document.getElementById('btn-next');
+    const btnPrev = document.getElementById('btn-prev');
+    let currentIndex = 0;
+
+    function updateSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      currentIndex = index;
+
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentIndex);
+      });
+
+      dots.forEach((d, idx) => {
+        d.classList.toggle('active', idx === currentIndex);
+      });
+
+      const activeSlide = slides[currentIndex];
+      if (!activeSlide) return;
+
+      const targetBgId = activeSlide.dataset.bg;
+      bgLayers.forEach(bg => {
+        bg.classList.toggle('active', bg.id === targetBgId);
+      });
+
+      if (particleMaterial && particleMaterial.color) {
+        if (targetBgId === 'bg-surface') {
+          particleMaterial.color.setHex(0x38bdf8);
+        } else if (targetBgId === 'bg-coral') {
+          particleMaterial.color.setHex(0x34d399);
+        } else {
+          particleMaterial.color.setHex(0x60a5fa);
+        }
+      }
+
+      if (depthDisplay && activeSlide.dataset.depth) {
+        depthDisplay.textContent = `DEPTH: ${activeSlide.dataset.depth.toUpperCase()}`;
+      }
+      if (currSlideDisplay) {
+        currSlideDisplay.textContent = String(currentIndex + 1).padStart(2, '0');
+      }
+    }
+
+    function jumpToSlide(idx) {
+      updateSlide(idx);
+      resetActivity();
+    }
+
+    if (btnNext) {
+      btnNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentIndex < slides.length - 1) {
+          updateSlide(currentIndex + 1);
+        }
+        resetActivity();
+      });
+    }
+
+    if (btnPrev) {
+      btnPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentIndex > 0) {
+          updateSlide(currentIndex - 1);
+        }
+        resetActivity();
+      });
+    }
+
+    // ==========================================
+    // 5. IN-BROWSER EDIT MODE (WYSIWYG & PERSISTENCE)
+    // ==========================================
+    let isEditMode = false;
+    const btnEditMode = document.getElementById('btn-edit-mode');
+    const editToolbar = document.getElementById('edit-toolbar');
+    const btnSaveEdits = document.getElementById('btn-save-edits');
+    const btnDownloadHtml = document.getElementById('btn-download-html');
+    const btnCopyJson = document.getElementById('btn-copy-json');
+    const btnResetEdits = document.getElementById('btn-reset-edits');
+    const btnCloseEdit = document.getElementById('btn-close-edit');
+    const toastEl = document.getElementById('toast');
+    let toastTimer = null;
+
+    function showToast(msg, duration = 3200) {
+      if (!toastEl) return;
+      toastEl.innerHTML = msg;
+      toastEl.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastEl.classList.add('hidden');
+      }, duration);
+    }
+
+    function getEditableElements() {
+      return document.querySelectorAll(
+        '.slide-title, .slide-subtitle, .pill, .card-label, .card-stat, .card-desc'
+      );
+    }
+
+
+    // ========================================================
+    
+    // ========================================================
+    // DIRECT ON-CARD CONTROLS (DELETE, MOVE, SWAP, COLOR)
+    // ========================================================
+
+    function deleteCard(btn) {
+      const card = btn.closest('.metric-card');
+      if (!card) return;
+      if (confirm('Bạn có chắc muốn XÓA ô thẻ này không?')) {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+          card.style.display = 'none';
+          card.setAttribute('data-deleted', 'true');
+          showToast('🗑️ Đã xóa thẻ! Bấm [Lưu & Đồng bộ] để áp dụng cho cả nhóm.');
+        }, 250);
+      }
+    }
+
+    function moveCard(btn, direction) {
+      const card = btn.closest('.metric-card');
+      if (!card) return;
+      const grid = card.parentElement;
+      if (!grid) return;
+
+      if (direction === -1) {
+        // Move Left (previous sibling that is a metric-card)
+        let prev = card.previousElementSibling;
+        while (prev && !prev.classList.contains('metric-card')) {
+          prev = prev.previousElementSibling;
+        }
+        if (prev) {
+          grid.insertBefore(card, prev);
+          showToast('◀ Đã hoán đổi thẻ sang bên trái!');
+        } else {
+          showToast('ℹ Thẻ này đã ở vị trí đầu tiên.');
+        }
+      } else if (direction === 1) {
+        // Move Right (next sibling that is a metric-card)
+        let next = card.nextElementSibling;
+        while (next && !next.classList.contains('metric-card')) {
+          next = next.nextElementSibling;
+        }
+        if (next) {
+          grid.insertBefore(next, card);
+          showToast('▶ Đã hoán đổi thẻ sang bên phải!');
+        } else {
+          showToast('ℹ Thẻ này đã ở vị trí cuối cùng.');
+        }
+      }
+    }
+
+    function cycleCardColor(btn) {
+      const card = btn.closest('.metric-card');
+      if (!card) return;
+      const colors = ['border-cyan', 'border-emerald', 'border-blue', 'border-gold', 'border-rose'];
+      let currentIdx = -1;
+      colors.forEach((c, i) => {
+        if (card.classList.contains(c)) currentIdx = i;
+      });
+      colors.forEach(c => card.classList.remove(c));
+      const nextColor = colors[(currentIdx + 1) % colors.length];
+      card.classList.add(nextColor);
+      showToast('🎨 Đã đổi màu viền phát sáng của thẻ!');
+    }
+
+    function addNewCardToSlide(btn) {
+      const grid = btn.parentElement;
+      if (!grid) return;
+      const customId = 'card_' + Date.now();
+      const newCard = document.createElement('div');
+      newCard.className = 'metric-card border-cyan';
+      newCard.setAttribute('data-custom-id', customId);
+      newCard.innerHTML = `
+        <div class="card-action-bar">
+          <span class="cab-btn cab-btn-drag" title="Kéo di chuyển thẻ tự do">✥</span>
+          <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+          <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+          <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền">🎨</button>
+          <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa thẻ này">🗑️</button>
+        </div>
+        <div class="card-label" contenteditable="true" spellcheck="false">TIÊU ĐỀ THẺ MỚI</div>
+        <div class="card-stat" contenteditable="true" spellcheck="false">+100%</div>
+        <div class="card-desc" contenteditable="true" spellcheck="false">Click vào để gõ nội dung chi tiết cho thẻ này.</div>
+      `;
+      grid.insertBefore(newCard, btn);
+      attachCardDragEvents(newCard);
+      showToast('✨ Đã thêm 1 thẻ mới vào slide! Bạn có thể gõ chữ và bấm ◀ ▶ đổi chỗ.');
+    }
+
+    // Attach Drag-and-Drop to individual cards
+    function attachCardDragEvents(card) {
+      const dragHandle = card.querySelector('.cab-btn-drag');
+      if (!dragHandle) return;
+
+      let isCardDragging = false;
+      let startX = 0, startY = 0;
+      let origX = 0, origY = 0;
+
+      dragHandle.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        isCardDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        const trans = card.style.transform || '';
+        const match = /translate\(([-0-9.]+)px,\s*([-0-9.]+)px\)/.exec(trans);
+        origX = match ? parseFloat(match[1]) : 0;
+        origY = match ? parseFloat(match[2]) : 0;
+
+        document.body.style.cursor = 'grabbing';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isCardDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        card.style.transform = `translate(${origX + dx}px, ${origY + dy}px)`;
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isCardDragging) {
+          isCardDragging = false;
+          document.body.style.cursor = 'default';
+        }
+      });
+    }
+
+    // Attach drag to all existing cards
+    document.querySelectorAll('.metric-card').forEach(attachCardDragEvents);
+
+    
+    // ========================================================
+    // UNDO HISTORY & ADVANCED CARD POSITIONING ENGINE
+    // ========================================================
+    const undoStack = [];
+    const MAX_UNDO = 20;
+
+    function saveUndoState() {
+      const activeSlide = slides[currentIndex];
+      if (!activeSlide) return;
+      // Save HTML snapshot of active slide
+      undoStack.push({
+        slideIndex: currentIndex,
+        html: activeSlide.innerHTML
+      });
+      if (undoStack.length > MAX_UNDO) undoStack.shift();
+    }
+
+    function performUndo() {
+      if (!undoStack.length) {
+        showToast('ℹ Không còn thao tác nào để hoàn tác.');
+        return;
+      }
+      const lastState = undoStack.pop();
+      const targetSlide = slides[lastState.slideIndex];
+      if (targetSlide) {
+        targetSlide.innerHTML = lastState.html;
+        setupCardEvents(targetSlide);
+        showToast('↩️ Đã hoàn tác thao tác vừa rồi thành công!');
+      }
+    }
+
+    // Toggle card between normal column and bottom row (centered)
+    function toggleCardBottomRow(btn) {
+      saveUndoState();
+      const card = btn.closest('.metric-card');
+      if (!card) return;
+      const isBottom = card.classList.toggle('card-bottom-row');
+      btn.innerText = isBottom ? '⬆ Lên trên' : '⬇ Xuống dưới';
+      btn.title = isBottom ? 'Đưa thẻ về hàng trên' : 'Chuyển thẻ xuống hàng dưới (chính giữa)';
+      showToast(isBottom ? '⬇ Đã đưa thẻ xuống hàng dưới chính giữa!' : '⬆ Đã đưa thẻ về hàng trên!');
+    }
+
+    // Delete Card with Undo Support
+    function deleteCard(btn) {
+      const card = btn.closest('.metric-card');
+      if (!card) return;
+      if (confirm('Bạn có chắc muốn XÓA ô thẻ này khỏi slide không? (Có thể bấm Hoàn tác để lấy lại)')) {
+        saveUndoState();
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+          card.style.display = 'none';
+          card.setAttribute('data-deleted', 'true');
+          showToast('🗑️ Đã xóa ô thẻ! Bạn có thể bấm [↩️ Hoàn tác] nếu muốn khôi phục.');
+        }, 220);
+      }
+    }
+
+    // Move Card Left / Right
+    function moveCard(btn, direction) {
+      const card = btn.closest('.metric-card');
+      if (!card) return;
+      const grid = card.parentElement;
+      if (!grid) return;
+      saveUndoState();
+
+      if (direction === -1) {
+        let prev = card.previousElementSibling;
+        while (prev && !prev.classList.contains('metric-card')) {
+          prev = prev.previousElementSibling;
+        }
+        if (prev) {
+          grid.insertBefore(card, prev);
+          showToast('◀ Đã hoán đổi thẻ sang bên trái!');
+        }
+      } else if (direction === 1) {
+        let next = card.nextElementSibling;
+        while (next && !next.classList.contains('metric-card')) {
+          next = next.nextElementSibling;
+        }
+        if (next) {
+          grid.insertBefore(next, card);
+          showToast('▶ Đã hoán đổi thẻ sang bên phải!');
+        }
+      }
+    }
+
+    // Cycle Card Color
+    function cycleCardColor(btn) {
+      const card = btn.closest('.metric-card');
+      if (!card) return;
+      saveUndoState();
+      const colors = ['border-cyan', 'border-emerald', 'border-blue', 'border-gold', 'border-rose'];
+      let currentIdx = -1;
+      colors.forEach((c, i) => {
+        if (card.classList.contains(c)) currentIdx = i;
+      });
+      colors.forEach(c => card.classList.remove(c));
+      const nextColor = colors[(currentIdx + 1) % colors.length];
+      card.classList.add(nextColor);
+      showToast('🎨 Đã đổi màu viền thẻ!');
+    }
+
+    // Drag Card Anywhere Across Screen
+    function attachCardDragEvents(card) {
+      const dragHandle = card.querySelector('.cab-btn-drag');
+      if (!dragHandle) return;
+
+      let isCardDragging = false;
+      let startMouseX = 0, startMouseY = 0;
+      let initX = 0, initY = 0;
+
+      dragHandle.onmousedown = function(e) {
+        if (!isEditMode) return;
+        e.preventDefault();
+        e.stopPropagation();
+        saveUndoState();
+
+        isCardDragging = true;
+        startMouseX = e.clientX;
+        startMouseY = e.clientY;
+
+        const trans = card.style.transform || '';
+        const match = /translate3d\(([-0-9.]+)px,\s*([-0-9.]+)px/.exec(trans) || /translate\(([-0-9.]+)px,\s*([-0-9.]+)px\)/.exec(trans);
+        initX = match ? parseFloat(match[1]) : 0;
+        initY = match ? parseFloat(match[2]) : 0;
+
+        card.classList.add('is-dragging');
+        document.body.style.cursor = 'grabbing';
+      };
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isCardDragging) return;
+        const dx = e.clientX - startMouseX;
+        const dy = e.clientY - startMouseY;
+        card.style.transform = `translate3d(${initX + dx}px, ${initY + dy}px, 0)`;
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isCardDragging) {
+          isCardDragging = false;
+          card.classList.remove('is-dragging');
+          document.body.style.cursor = 'default';
+          showToast('📍 Đã đặt thẻ vào vị trí mới! Bấm [Lưu & Đồng bộ] để lưu.');
+        }
+      });
+    }
+
+    function setupCardEvents(scope) {
+      const parent = scope || document;
+      parent.querySelectorAll('.metric-card').forEach(card => {
+        attachCardDragEvents(card);
+      });
+    }
+
+    // Initialize Card Events on startup
+    setupCardEvents();
+
+    // Ctrl+Z Undo Listener
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+        if (!e.target || !e.target.isContentEditable) {
+          e.preventDefault();
+          performUndo();
+        }
+      }
+    });
+
+    
+    // ========================================================
+    // RICH TEXT FORMATTING ENGINE (WORD / CANVA STYLE)
+    // ========================================================
+    const textToolbar = document.getElementById('text-format-toolbar');
+    let savedSelectionRange = null;
+
+    function saveCurrentTextSelection() {
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0) {
+        savedSelectionRange = sel.getRangeAt(0).cloneRange();
+      }
+    }
+
+    function restoreCurrentTextSelection() {
+      if (savedSelectionRange) {
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(savedSelectionRange);
+      }
+    }
+
+    function applyTextFormat(e, cmd, val = null) {
+      if (e) e.preventDefault();
+      saveUndoState();
+      restoreCurrentTextSelection();
+      document.execCommand(cmd, false, val);
+      saveCurrentTextSelection();
+      showToast('✍️ Đã áp dụng định dạng chữ!');
+    }
+
+    function applyTextColor(e, colorHex) {
+      if (e) e.preventDefault();
+      saveUndoState();
+      restoreCurrentTextSelection();
+      document.execCommand('styleWithCSS', false, true);
+      document.execCommand('foreColor', false, colorHex);
+      saveCurrentTextSelection();
+      showToast('🎨 Đã đổi màu chữ thành công!');
+    }
+
+    function applyTextHighlight(e, colorRgba) {
+      if (e) e.preventDefault();
+      saveUndoState();
+      restoreCurrentTextSelection();
+      document.execCommand('styleWithCSS', false, true);
+      document.execCommand('hiliteColor', false, colorRgba);
+      saveCurrentTextSelection();
+      showToast('🖍️ Đã tô màu nền chữ!');
+    }
+
+    function changeSelectedFontSize(e, delta) {
+      if (e) e.preventDefault();
+      saveUndoState();
+      restoreCurrentTextSelection();
+      const sel = window.getSelection();
+      if (sel && sel.anchorNode) {
+        let parentEl = sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentElement : sel.anchorNode;
+        if (parentEl) {
+          const curSize = parseFloat(window.getComputedStyle(parentEl).fontSize);
+          parentEl.style.fontSize = `${Math.max(12, curSize + delta)}px`;
+          showToast(`🔤 Đã đổi cỡ chữ: ${Math.round(curSize + delta)}px`);
+        }
+      }
+    }
+
+    // Monitor text selection across the document
+    document.addEventListener('selectionchange', () => {
+      if (!isEditMode || !textToolbar) return;
+
+      const sel = window.getSelection();
+      if (sel && !sel.isCollapsed && sel.rangeCount > 0) {
+        const range = sel.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          saveCurrentTextSelection();
+          const topPos = Math.max(70, rect.top - 52);
+          const leftPos = Math.max(15, Math.min(window.innerWidth - 480, rect.left));
+          textToolbar.style.top = `${topPos}px`;
+          textToolbar.style.left = `${leftPos}px`;
+          textToolbar.classList.remove('hidden');
+          return;
+        }
+      }
+
+      // Hide if click was outside the toolbar
+      setTimeout(() => {
+        const currentSel = window.getSelection();
+        if (!currentSel || currentSel.isCollapsed) {
+          textToolbar.classList.add('hidden');
+        }
+      }, 200);
+    });
+
+    // MINI-CANVA INTERACTIVE ENGINE (SELECTION, DRAG, RESIZE, CUSTOM SHAPES)
+    // ========================================================
+    let selectedElement = null;
+    const canvaInspector = document.getElementById('canva-inspector');
+    const ciOpacity = document.getElementById('ci-opacity');
+    const addMenu = document.getElementById('add-menu');
+    const btnAddDropdown = document.getElementById('btn-add-dropdown');
+
+    // Toggle Dropdown Menu
+    if (btnAddDropdown) {
+      btnAddDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+        addMenu.classList.toggle('hidden');
+      });
+    }
+
+    window.addEventListener('click', (e) => {
+      if (addMenu && !addMenu.contains(e.target) && e.target !== btnAddDropdown) {
+        addMenu.classList.add('hidden');
+      }
+    });
+
+    // Make elements selectable in Edit Mode
+    function setupElementSelection() {
+      const targets = document.querySelectorAll(
+        '.slide-title, .slide-subtitle, .pill, .metric-card, .custom-shape'
+      );
+
+      targets.forEach(el => {
+        // Ensure corner resize handle exists
+        if (!el.querySelector('.canva-resize-handle')) {
+          const handle = document.createElement('div');
+          handle.className = 'canva-resize-handle';
+          handle.title = 'Kéo để chỉnh kích thước';
+          el.appendChild(handle);
+          attachResizeHandler(handle, el);
+        }
+
+        el.onclick = function(e) {
+          if (!isEditMode) return;
+          // Don't deselect if clicking inside
+          e.stopPropagation();
+          selectElement(el);
+        };
+      });
+    }
+
+    function selectElement(el) {
+      if (selectedElement) {
+        selectedElement.classList.remove('canva-selected');
+      }
+      selectedElement = el;
+      if (!selectedElement) {
+        if (canvaInspector) canvaInspector.classList.add('hidden');
+        return;
+      }
+
+      selectedElement.classList.add('canva-selected');
+      updateInspectorPosition();
+
+      // Read current opacity
+      if (ciOpacity) {
+        const curOp = window.getComputedStyle(selectedElement).opacity;
+        ciOpacity.value = Math.round(parseFloat(curOp || 1) * 100);
+      }
+
+      if (canvaInspector) canvaInspector.classList.remove('hidden');
+    }
+
+    function deselectElement() {
+      if (selectedElement) {
+        selectedElement.classList.remove('canva-selected');
+        selectedElement = null;
+      }
+      if (canvaInspector) canvaInspector.classList.add('hidden');
+    }
+
+    function updateInspectorPosition() {
+      if (!selectedElement || !canvaInspector) return;
+      const rect = selectedElement.getBoundingClientRect();
+      const topPos = Math.max(70, rect.top - 55);
+      const leftPos = Math.max(20, Math.min(window.innerWidth - 480, rect.left));
+      canvaInspector.style.top = `${topPos}px`;
+      canvaInspector.style.left = `${leftPos}px`;
+    }
+
+    window.addEventListener('resize', updateInspectorPosition);
+    window.addEventListener('scroll', updateInspectorPosition);
+
+    // Color Setting
+    function setElementColor(hexColor, borderClass) {
+      if (!selectedElement) return;
+      if (selectedElement.classList.contains('metric-card')) {
+        // Remove old border classes
+        ['border-cyan', 'border-emerald', 'border-blue', 'border-gold', 'border-rose'].forEach(c => selectedElement.classList.remove(c));
+        if (borderClass) {
+          selectedElement.classList.add(borderClass);
+        } else {
+          selectedElement.style.borderColor = hexColor;
+        }
+      } else {
+        selectedElement.style.borderColor = hexColor;
+        if (selectedElement.classList.contains('pill') || selectedElement.classList.contains('custom-divider')) {
+          selectedElement.style.color = hexColor;
+        }
+      }
+      showToast('🎨 Đã cập nhật màu sắc thành công!');
+    }
+
+    // Opacity Setting
+    function setElementOpacity(val) {
+      if (!selectedElement) return;
+      selectedElement.style.opacity = val / 100;
+    }
+
+    // Font Size Setting
+    function adjustFontSize(delta) {
+      if (!selectedElement) return;
+      const curSize = parseFloat(window.getComputedStyle(selectedElement).fontSize);
+      selectedElement.style.fontSize = `${Math.max(12, curSize + delta)}px`;
+    }
+
+    // Text Alignment
+    function setElementAlign(align) {
+      if (!selectedElement) return;
+      selectedElement.style.textAlign = align;
+    }
+
+    // Delete Element
+    function deleteSelectedElement() {
+      if (!selectedElement) return;
+      if (confirm('Bạn có chắc muốn xóa đối tượng này khỏi slide không?')) {
+        selectedElement.style.display = 'none';
+        selectedElement.setAttribute('data-deleted', 'true');
+        deselectElement();
+        showToast('🗑️ Đã xóa đối tượng. Bấm [Lưu] để đồng bộ!');
+      }
+    }
+
+    // Drag-and-Drop Repositioning via Drag Handle
+    const ciDrag = document.getElementById('ci-drag');
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let origTransX = 0, origTransY = 0;
+
+    if (ciDrag) {
+      ciDrag.addEventListener('mousedown', (e) => {
+        if (!selectedElement) return;
+        e.preventDefault();
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        // Parse existing transform translate
+        const trans = selectedElement.style.transform;
+        const match = /translate\(([-0-9.]+)px,\s*([-0-9.]+)px\)/.exec(trans);
+        if (match) {
+          origTransX = parseFloat(match[1]);
+          origTransY = parseFloat(match[2]);
+        } else {
+          origTransX = 0;
+          origTransY = 0;
+        }
+
+        document.body.style.cursor = 'grabbing';
+      });
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging || !selectedElement) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      const newX = origTransX + dx;
+      const newY = origTransY + dy;
+      selectedElement.style.transform = `translate(${newX}px, ${newY}px)`;
+      updateInspectorPosition();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        document.body.style.cursor = 'default';
+      }
+    });
+
+    // Corner Resizing
+    function attachResizeHandler(handle, parentEl) {
+      let isResizing = false;
+      let startW = 0, startH = 0, startMouseX = 0, startMouseY = 0;
+
+      handle.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        isResizing = true;
+        startMouseX = e.clientX;
+        startMouseY = e.clientY;
+        startW = parentEl.offsetWidth;
+        startH = parentEl.offsetHeight;
+        document.body.style.cursor = 'nwse-resize';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+        const w = Math.max(100, startW + (e.clientX - startMouseX));
+        const h = Math.max(50, startH + (e.clientY - startMouseY));
+        parentEl.style.width = `${w}px`;
+        parentEl.style.height = `${h}px`;
+        parentEl.style.maxWidth = 'none';
+        updateInspectorPosition();
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isResizing) {
+          isResizing = false;
+          document.body.style.cursor = 'default';
+        }
+      });
+    }
+
+    // Add New Elements on the Active Slide
+    function addNewElement(type) {
+      const activeSlide = slides[currentIndex];
+      if (!activeSlide) return;
+      if (addMenu) addMenu.classList.add('hidden');
+
+      const customId = 'custom_' + Date.now();
+      let newEl = null;
+
+      if (type === 'card') {
+        const grid = activeSlide.querySelector('.metrics-grid');
+        if (grid) {
+          newEl = document.createElement('div');
+          newEl.className = 'metric-card border-cyan custom-shape';
+          newEl.setAttribute('data-custom-id', customId);
+          newEl.innerHTML = `
+            <div class="card-label" contenteditable="true" spellcheck="false">TIÊU ĐỀ THẺ MỚI</div>
+            <div class="card-stat" contenteditable="true" spellcheck="false">+100%</div>
+            <div class="card-desc" contenteditable="true" spellcheck="false">Click vào để gõ nội dung mô tả cho thẻ số liệu này.</div>
+          `;
+          grid.appendChild(newEl);
+        }
+      } else if (type === 'textbox') {
+        newEl = document.createElement('div');
+        newEl.className = 'custom-text-box custom-shape';
+        newEl.setAttribute('data-custom-id', customId);
+        newEl.setAttribute('contenteditable', 'true');
+        newEl.setAttribute('spellcheck', 'false');
+        newEl.innerText = '📝 Nhập văn bản tự do của bạn tại đây...';
+        activeSlide.appendChild(newEl);
+      } else if (type === 'glassbox') {
+        newEl = document.createElement('div');
+        newEl.className = 'custom-glass-box custom-shape';
+        newEl.setAttribute('data-custom-id', customId);
+        newEl.setAttribute('contenteditable', 'true');
+        newEl.setAttribute('spellcheck', 'false');
+        newEl.innerHTML = '<h3 style="color:#38bdf8; margin-bottom:0.5rem;">Khung Kính Mờ</h3><p style="color:#cbd5e1;">Nội dung bên trong khung...</p>';
+        activeSlide.appendChild(newEl);
+      } else if (type === 'pill') {
+        newEl = document.createElement('span');
+        newEl.className = 'pill pill-target custom-shape';
+        newEl.setAttribute('data-custom-id', customId);
+        newEl.setAttribute('contenteditable', 'true');
+        newEl.setAttribute('spellcheck', 'false');
+        newEl.innerText = 'TAG MỚI';
+        const row = activeSlide.querySelector('.slide-meta-row');
+        if (row) row.appendChild(newEl);
+        else activeSlide.appendChild(newEl);
+      } else if (type === 'divider') {
+        newEl = document.createElement('div');
+        newEl.className = 'custom-divider custom-shape';
+        newEl.setAttribute('data-custom-id', customId);
+        activeSlide.appendChild(newEl);
+      }
+
+      if (newEl) {
+        setupElementSelection();
+        selectElement(newEl);
+        showToast('✨ Đã thêm đối tượng mới vào slide! Bạn có thể kéo thả và đổi màu theo ý muốn.');
+      }
+    }
+
+    function toggleEditMode(enable) {
+      if (!enable && isEditMode) {
+        deselectElement();
+      }
+
+      isEditMode = (enable !== undefined) ? enable : !isEditMode;
+      document.body.classList.toggle('edit-mode-active', isEditMode);
+      
+      const editables = getEditableElements();
+      editables.forEach(el => {
+        if (isEditMode) {
+          el.setAttribute('contenteditable', 'true');
+          el.setAttribute('spellcheck', 'false');
+          if (!el._hasAutoSave) {
+            el.addEventListener('input', triggerAutoSave);
+            el.addEventListener('blur', () => saveEdits(true));
+            el._hasAutoSave = true;
+          }
+        } else {
+          el.removeAttribute('contenteditable');
+          el.removeAttribute('spellcheck');
+        }
+      });
+
+      if (btnEditMode) {
+        btnEditMode.classList.toggle('active', isEditMode);
+        btnEditMode.innerHTML = isEditMode ? '✏️ Thoát sửa [E]' : '✏️ Chỉnh sửa nội dung [E]';
+      }
+
+      if (editToolbar) {
+        editToolbar.classList.toggle('hidden', !isEditMode);
+      }
+
+      if (isEditMode) {
+        setupElementSelection(); showToast('🎨 Mini-Canva Bật! Bấm chọn đối tượng để đổi màu, kéo thả hoặc bấm [+ Thêm đối tượng].');
+      }
+    }
+
+    function extractSlidesData() {
+      const slidesList = document.querySelectorAll('.slide');
+      const data = [];
+      slidesList.forEach((slideEl, idx) => {
+        const item = {
+          num: idx + 1,
+          target: slideEl.querySelector('.pill-target')?.innerText.trim() || '',
+          question: slideEl.querySelector('.pill-question')?.innerText.trim() || '',
+          speaker: slideEl.querySelector('.pill-speaker')?.innerText.trim() || '',
+          title: slideEl.querySelector('.slide-title')?.innerText.trim() || '',
+          subtitle: slideEl.querySelector('.slide-subtitle')?.innerText.trim() || '',
+          titleStyles: {
+            fontSize: slideEl.querySelector('.slide-title')?.style.fontSize || '',
+            textAlign: slideEl.querySelector('.slide-title')?.style.textAlign || '',
+            transform: slideEl.querySelector('.slide-title')?.style.transform || ''
+          },
+          cards: [],
+          customElements: []
+        };
+
+        // Capture Cards & Styles
+        slideEl.querySelectorAll('.metric-card').forEach((cardEl, cIdx) => {
+          item.cards.push({
+            label: cardEl.querySelector('.card-label')?.innerText.trim() || '',
+            stat: cardEl.querySelector('.card-stat')?.innerText.trim() || '',
+            desc: cardEl.querySelector('.card-desc')?.innerText.trim() || '',
+            className: cardEl.className,
+            transform: cardEl.style.transform || '',
+            opacity: cardEl.style.opacity || '',
+            width: cardEl.style.width || '',
+            height: cardEl.style.height || '',
+            isDeleted: cardEl.getAttribute('data-deleted') === 'true'
+          });
+        });
+
+        // Capture Custom Added Elements
+        slideEl.querySelectorAll('.custom-shape:not(.metric-card)').forEach(cEl => {
+          item.customElements.push({
+            id: cEl.getAttribute('data-custom-id') || '',
+            className: cEl.className,
+            html: cEl.innerHTML,
+            text: cEl.innerText,
+            transform: cEl.style.transform || '',
+            opacity: cEl.style.opacity || '',
+            color: cEl.style.color || '',
+            borderColor: cEl.style.borderColor || '',
+            width: cEl.style.width || '',
+            height: cEl.style.height || '',
+            isDeleted: cEl.getAttribute('data-deleted') === 'true'
+          });
+        });
+
+        data.push(item);
+      });
+      return data;
+    }
+
+    const CLOUD_SYNC_ENDPOINT = 'https://sdg14-cinematic-deck.onrender.com/api/sync';
+    let lastCloudTimestamp = 0;
+    let autoSaveTimer = null;
+
+    function setCloudStatus(status) {
+      const badge = document.getElementById('cloud-status-badge');
+      const text = document.getElementById('cloud-status-text');
+      if (!badge || !text) return;
+      if (status === 'saving') {
+        badge.style.background = 'rgba(245, 158, 11, 0.18)';
+        badge.style.borderColor = '#f59e0b';
+        badge.style.color = '#fbbf24';
+        text.textContent = 'Đang lưu Cloud...';
+      } else if (status === 'synced') {
+        badge.style.background = 'rgba(16, 185, 129, 0.18)';
+        badge.style.borderColor = '#10b981';
+        badge.style.color = '#34d399';
+        text.textContent = 'Đã đồng bộ Cloud';
+      } else {
+        badge.style.background = 'rgba(148, 163, 184, 0.18)';
+        badge.style.borderColor = '#64748b';
+        badge.style.color = '#94a3b8';
+        text.textContent = 'Lưu cục bộ';
+      }
+    }
+
+    function triggerAutoSave() {
+      setCloudStatus('saving');
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(() => {
+        saveEdits(true);
+      }, 1500);
+    }
+
+    async function syncToCloud(data) {
+      try {
+        const payload = {
+          name: 'SDG14 Slides Sync',
+          slides: data,
+          updatedAt: new Date().toISOString()
+        };
+        const res = await fetch(CLOUD_SYNC_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          lastCloudTimestamp = Date.now();
+          return true;
+        }
+        return false;
+      } catch (e) {
+        console.warn('Cloud sync error:', e);
+        return false;
+      }
+    }
+
+    async function fetchFromCloud() {
+      try {
+        const res = await fetch(CLOUD_SYNC_ENDPOINT + '?_t=' + Date.now());
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.slides && json.slides.length > 0) {
+            return json;
+          } else if (json && json.data && json.data.slides && json.data.slides.length > 0) {
+            return json.data;
+          }
+        }
+      } catch (e) {
+        console.warn('Cloud fetch error:', e);
+      }
+      return null;
+    }
+
+    async function saveEdits(isSilent = false) {
+      const data = extractSlidesData();
+      try {
+        localStorage.setItem('sdg14_slides_custom_data', JSON.stringify(data));
+      } catch (e) {}
+
+      setCloudStatus('saving');
+      if (!isSilent) showToast('☁️ Đang đồng bộ lên đám mây cho cả nhóm...');
+      
+      const cloudSuccess = await syncToCloud(data);
+      if (cloudSuccess) {
+        setCloudStatus('synced');
+        if (!isSilent) showToast('✅ Đã lưu & Đồng bộ lên Đám mây! Cả nhóm mở link đều thấy ngay.');
+      } else {
+        setCloudStatus('offline');
+        if (!isSilent) showToast('💾 Đã lưu trên máy! (Máy chủ đám mây đang kết nối lại...).');
+      }
+    }
+
+    function renderDataToDOM(data) {
+      if (!data || !data.length) return;
+      const slidesList = document.querySelectorAll('.slide');
+      data.forEach(item => {
+        const sIdx = item.num - 1;
+        const slideEl = slidesList[sIdx];
+        if (!slideEl) return;
+        
+        // 1. Core Text & Meta
+        if (item.target) {
+          const el = slideEl.querySelector('.pill-target');
+          if (el) el.innerText = item.target;
+        }
+        if (item.question) {
+          const el = slideEl.querySelector('.pill-question');
+          if (el) el.innerText = item.question;
+        }
+        if (item.speaker) {
+          const el = slideEl.querySelector('.pill-speaker');
+          if (el) el.innerText = item.speaker;
+        }
+        if (item.title) {
+          const el = slideEl.querySelector('.slide-title');
+          if (el) {
+            el.innerText = item.title;
+            if (item.titleStyles) {
+              if (item.titleStyles.fontSize) el.style.fontSize = item.titleStyles.fontSize;
+              if (item.titleStyles.textAlign) el.style.textAlign = item.titleStyles.textAlign;
+              if (item.titleStyles.transform) el.style.transform = item.titleStyles.transform;
+            }
+          }
+        }
+        if (item.subtitle) {
+          const el = slideEl.querySelector('.slide-subtitle');
+          if (el) el.innerText = item.subtitle;
+        }
+
+        // 2. Cards & Card Styles
+        if (item.cards) {
+          const cardEls = slideEl.querySelectorAll('.metric-card');
+          item.cards.forEach((c, cIdx) => {
+            if (cardEls[cIdx]) {
+              if (c.label) cardEls[cIdx].querySelector('.card-label').innerText = c.label;
+              if (c.stat) cardEls[cIdx].querySelector('.card-stat').innerText = c.stat;
+              if (c.desc) cardEls[cIdx].querySelector('.card-desc').innerText = c.desc;
+              if (c.className) cardEls[cIdx].className = c.className;
+              if (c.transform) cardEls[cIdx].style.transform = c.transform;
+              if (c.opacity) cardEls[cIdx].style.opacity = c.opacity;
+              if (c.width) cardEls[cIdx].style.width = c.width;
+              if (c.height) cardEls[cIdx].style.height = c.height;
+              if (c.isDeleted) {
+                cardEls[cIdx].style.display = 'none';
+                cardEls[cIdx].setAttribute('data-deleted', 'true');
+              }
+            }
+          });
+        }
+
+        // 3. Custom Elements Rebuilding
+        if (item.customElements && item.customElements.length) {
+          item.customElements.forEach(ce => {
+            let existing = slideEl.querySelector(`[data-custom-id="${ce.id}"]`);
+            if (!existing && !ce.isDeleted) {
+              existing = document.createElement('div');
+              existing.className = ce.className;
+              existing.setAttribute('data-custom-id', ce.id);
+              existing.innerHTML = ce.html;
+              if (ce.className.includes('pill')) {
+                const row = slideEl.querySelector('.slide-meta-row');
+                if (row) row.appendChild(existing);
+                else slideEl.appendChild(existing);
+              } else {
+                slideEl.appendChild(existing);
+              }
+            }
+            if (existing) {
+              if (ce.isDeleted) {
+                existing.style.display = 'none';
+                existing.setAttribute('data-deleted', 'true');
+              } else {
+                if (ce.transform) existing.style.transform = ce.transform;
+                if (ce.opacity) existing.style.opacity = ce.opacity;
+                if (ce.color) existing.style.color = ce.color;
+                if (ce.borderColor) existing.style.borderColor = ce.borderColor;
+                if (ce.width) existing.style.width = ce.width;
+                if (ce.height) existing.style.height = ce.height;
+              }
+            }
+          });
+        }
+      });
+
+      setupElementSelection();
+    }
+
+    async function applySavedEdits() {
+      // 1. Render from local storage immediately for fast load
+      const saved = localStorage.getItem('sdg14_slides_custom_data');
+      if (saved) {
+        try {
+          renderDataToDOM(JSON.parse(saved));
+        } catch (e) {}
+      }
+
+      // 2. Fetch latest shared data from Cloud
+      const cloudRes = await fetchFromCloud();
+      if (cloudRes && cloudRes.slides && cloudRes.slides.length) {
+        renderDataToDOM(cloudRes.slides);
+        try {
+          localStorage.setItem('sdg14_slides_custom_data', JSON.stringify(cloudRes.slides));
+        } catch (e) {}
+        if (cloudRes.updatedAt) {
+          lastCloudTimestamp = new Date(cloudRes.updatedAt).getTime();
+        }
+        setCloudStatus('synced');
+        console.log('Synchronized slides from Cloud Database');
+      }
+
+      // 3. Start real-time background polling (every 5 seconds) for Canva-like team sync
+      setInterval(async () => {
+        // If user is actively typing right now, don't interrupt input
+        if (isEditMode && document.activeElement && document.activeElement.isContentEditable) return;
+        
+        const latest = await fetchFromCloud();
+        if (latest && latest.slides && latest.slides.length && latest.updatedAt) {
+          const t = new Date(latest.updatedAt).getTime();
+          if (t > lastCloudTimestamp) {
+            lastCloudTimestamp = t;
+            renderDataToDOM(latest.slides);
+            try {
+              localStorage.setItem('sdg14_slides_custom_data', JSON.stringify(latest.slides));
+            } catch (e) {}
+            setCloudStatus('synced');
+            console.log('⚡ Nhận bản cập nhật mới từ thành viên trong nhóm!');
+          }
+        }
+      }, 5000);
+    }
+
+    function downloadEditedHTML() {
+      saveEdits();
+      const wasEdit = isEditMode;
+      if (wasEdit) toggleEditMode(false);
+      
+      const htmlStr = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([htmlStr], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      if (wasEdit) toggleEditMode(true);
+      showToast('📥 Đã tải file index.html mới chứa đầy đủ nội dung đã chỉnh sửa!');
+    }
+
+    function copyDataJSON() {
+      const data = extractSlidesData();
+      const jsonStr = JSON.stringify(data, null, 2);
+      navigator.clipboard.writeText(jsonStr).then(() => {
+        showToast('📋 Đã sao chép dữ liệu JSON vào Clipboard! Bạn có thể dán vào chat để yêu cầu lưu lên GitHub.');
+      }).catch(err => {
+        console.error('Clipboard copy failed:', err);
+        showToast('⚠️ Không thể tự động sao chép. Vui lòng thử lại.');
+      });
+    }
+
+    function resetToOriginal() {
+      if (confirm('Bạn có chắc muốn xóa các chỉnh sửa và khôi phục về nội dung gốc ban đầu?')) {
+        localStorage.removeItem('sdg14_slides_custom_data');
+        location.reload();
+      }
+    }
+
+    if (btnEditMode) btnEditMode.addEventListener('click', () => toggleEditMode());
+    if (btnSaveEdits) btnSaveEdits.addEventListener('click', saveEdits);
+    if (btnDownloadHtml) btnDownloadHtml.addEventListener('click', downloadEditedHTML);
+    if (btnCopyJson) btnCopyJson.addEventListener('click', copyDataJSON);
+    if (btnResetEdits) btnResetEdits.addEventListener('click', resetToOriginal);
+    if (btnCloseEdit) btnCloseEdit.addEventListener('click', () => toggleEditMode(false));
+
+    // Load saved edits right away on startup
+    applySavedEdits();
+
+    window.addEventListener('keydown', (e) => {
+      // If typing in an editable field, ignore navigation keys except Escape to blur
+      if (e.target && (e.target.isContentEditable || ['INPUT', 'TEXTAREA'].includes(e.target.tagName))) {
+        if (e.key === 'Escape') {
+          e.target.blur();
+        }
+        return;
+      }
+
+      resetActivity();
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        if (currentIndex < slides.length - 1) {
+          updateSlide(currentIndex + 1);
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        if (currentIndex > 0) {
+          updateSlide(currentIndex - 1);
+        }
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      } else if (e.key.toLowerCase() === 'e') {
+        toggleEditMode();
+      } else if (e.key === 'Escape') {
+        if (isEditMode) {
+          toggleEditMode(false);
+        } else if (isSimulatedFullscreen) {
+          isSimulatedFullscreen = false;
+          document.body.classList.remove('simulated-fullscreen');
+          updateFullscreenUI();
+        }
+      }
+    });
+
+    // ==========================================
+    // 3. FULLSCREEN CONTROLLER & GUARANTEED DIMMING
+    // ==========================================
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    const hudBottom = document.querySelector('.hud-bottom');
+    let idleTimer = null;
+    let isSimulatedFullscreen = false;
+
+    function isNativeFullscreen() {
+      return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+    }
+
+    function isPresentationActive() {
+      return isNativeFullscreen() || isSimulatedFullscreen;
+    }
+
+    function updateFullscreenUI() {
+      if (!btnFullscreen) return;
+      if (isPresentationActive()) {
+        document.body.classList.add('is-fullscreen');
+        btnFullscreen.innerHTML = '✖ Thu nhỏ';
+        btnFullscreen.classList.add('dimmed');
+        // Automatically close Edit Mode when entering Fullscreen
+        if (isEditMode) {
+          toggleEditMode(false);
+        }
+        startIdleTimer();
+      } else {
+        document.body.classList.remove('is-fullscreen', 'show-controls');
+        btnFullscreen.innerHTML = '⛶ Toàn màn hình';
+        btnFullscreen.classList.remove('dimmed');
+        clearTimeout(idleTimer);
+      }
+    }
+
+    function startIdleTimer() {
+      clearTimeout(idleTimer);
+      if (isPresentationActive()) {
+        idleTimer = setTimeout(() => {
+          document.body.classList.remove('show-controls');
+        }, 2000);
+      }
+    }
+
+    function resetActivity() {
+      if (isPresentationActive()) {
+        document.body.classList.add('show-controls');
+        startIdleTimer();
+      }
+    }
+
+    window.addEventListener('mousemove', resetActivity);
+
+    function toggleFullscreen() {
+      const docEl = document.documentElement;
+      if (!isPresentationActive()) {
+        const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+        if (req) {
+          try {
+            const p = req.call(docEl);
+            if (p && p.catch) {
+              p.catch(err => {
+                console.warn('Native fullscreen blocked, using simulated fullscreen:', err);
+                isSimulatedFullscreen = true;
+                document.body.classList.add('simulated-fullscreen');
+                updateFullscreenUI();
+              });
+            }
+          } catch (e) {
+            isSimulatedFullscreen = true;
+            document.body.classList.add('simulated-fullscreen');
+            updateFullscreenUI();
+          }
+        } else {
+          isSimulatedFullscreen = true;
+          document.body.classList.add('simulated-fullscreen');
+          updateFullscreenUI();
+        }
+        btnFullscreen.classList.add('dimmed');
+      } else {
+        if (isNativeFullscreen()) {
+          const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+          if (exit) {
+            try {
+              exit.call(document).catch(() => {});
+            } catch (e) {}
+          }
+        }
+        if (isSimulatedFullscreen) {
+          isSimulatedFullscreen = false;
+          document.body.classList.remove('simulated-fullscreen');
+        }
+        updateFullscreenUI();
+      }
+    }
+
+    if (btnFullscreen) {
+      btnFullscreen.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFullscreen();
+      });
+    }
+
+    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+      document.addEventListener(evt, updateFullscreenUI);
+    });
+
+    // ==========================================
+    // 4. AMBIENT LIVING WATER MICRO-BUBBLES
+    // ==========================================
+    const marineCanvas = document.getElementById('marine-canvas');
+    const mCtx = marineCanvas ? marineCanvas.getContext('2d') : null;
+
+    function resizeMarineCanvas() {
+      if (!marineCanvas) return;
+      marineCanvas.width = window.innerWidth;
+      marineCanvas.height = window.innerHeight;
+    }
+    resizeMarineCanvas();
+    window.addEventListener('resize', resizeMarineCanvas);
+
+    // Dynamic Micro-Bubbles
+    const bubbleCount = 40;
+    const bubbles = [];
+    for (let i = 0; i < bubbleCount; i++) {
+      bubbles.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        radius: 1.5 + Math.random() * 3.5,
+        speed: 0.5 + Math.random() * 1.1,
+        wobbleSpeed: 0.02 + Math.random() * 0.03,
+        wobbleOffset: Math.random() * Math.PI * 2,
+        opacity: 0.15 + Math.random() * 0.35
+      });
+    }
+
+    function renderBubbles() {
+      if (!mCtx) return;
+      mCtx.clearRect(0, 0, marineCanvas.width, marineCanvas.height);
+
+      for (let b of bubbles) {
+        b.y -= b.speed;
+        b.wobbleOffset += b.wobbleSpeed;
+        const curX = b.x + Math.sin(b.wobbleOffset) * 6;
+        if (b.y < -20) {
+          b.y = marineCanvas.height + 20;
+          b.x = Math.random() * marineCanvas.width;
+        }
+
+        mCtx.save();
+        mCtx.beginPath();
+        mCtx.arc(curX, b.y, b.radius, 0, Math.PI * 2);
+        mCtx.fillStyle = `rgba(224, 242, 254, ${b.opacity * 0.35})`;
+        mCtx.fill();
+        mCtx.strokeStyle = `rgba(255, 255, 255, ${b.opacity * 0.75})`;
+        mCtx.lineWidth = 1;
+        mCtx.stroke();
+        mCtx.restore();
+      }
+
+      requestAnimationFrame(renderBubbles);
+    }
+    renderBubbles();
+
+    // Initialize Slide 01
+    updateSlide(0);
+
+  </script>
+</body>
+</html>
