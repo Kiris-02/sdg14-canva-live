@@ -1202,8 +1202,8 @@
         <button id="btn-undo" class="btn-tb btn-tb-undo" onclick="performUndo()" title="Hoàn tác thao tác vừa rồi (Ctrl+Z)">↩️ Hoàn tác</button>
         <button id="btn-save-edits" class="btn-tb btn-tb-save">☁️ Lưu & Đồng bộ cả nhóm</button>
         <button id="btn-download-html" class="btn-tb">📥 Tải file HTML mới</button>
-        <button id="btn-copy-json" class="btn-tb">📋 Sao chép dữ liệu</button>
-        <button id="btn-reset-edits" class="btn-tb btn-tb-danger">🔄 Khôi phục gốc</button>
+        <button id="btn-restore-slide" class="btn-tb" style="background: rgba(245, 158, 11, 0.2); border-color:#f59e0b; color:#fbbf24;" onclick="restoreCurrentSlide()" title="Khôi phục riêng Slide đang xem về nguyên bản">🔄 Khôi phục Slide này</button>
+        <button id="btn-reset-edits" class="btn-tb btn-tb-danger" title="Khôi phục toàn bộ 12 slide về mặc định">🔄 Khôi phục cả 12 Slide</button>
         <button id="btn-close-edit" class="btn-tb btn-tb-close" title="Đóng chế độ sửa [Esc]">✖</button>
       </div>
     </div>
@@ -2124,6 +2124,7 @@
     // 2. SLIDE NAVIGATION & VISUAL TRANSITIONS
     // ==========================================
     const slides = document.querySelectorAll('.slide');
+    const originalSlideHTMLs = Array.from(slides).map(s => s.innerHTML);
     const dots = document.querySelectorAll('.dot-btn');
     const bgLayers = document.querySelectorAll('.bg-layer');
     const depthDisplay = document.getElementById('depth-display');
@@ -2174,6 +2175,23 @@
     function jumpToSlide(idx) {
       updateSlide(idx);
       resetActivity();
+    }
+
+    function restoreCurrentSlide() {
+      if (!confirm(`Bạn có chắc muốn khôi phục riêng Slide ${currentIndex + 1} về nội dung ban đầu không?\n\n(Chỉ riêng Slide ${currentIndex + 1} được khôi phục, các Slide khác vẫn giữ nguyên nội dung bạn đã sửa)`)) return;
+      
+      const slideEl = slides[currentIndex];
+      if (slideEl && originalSlideHTMLs[currentIndex]) {
+        slideEl.innerHTML = originalSlideHTMLs[currentIndex];
+        
+        if (isEditMode) {
+          toggleEditMode(false);
+          toggleEditMode(true);
+        }
+        
+        saveEdits();
+        showToast(`✅ Đã khôi phục riêng Slide ${currentIndex + 1} về nguyên bản ban đầu!`);
+      }
     }
 
     if (btnNext) {
@@ -3145,6 +3163,9 @@
               if (c.isDeleted) {
                 cardEls[cIdx].style.display = 'none';
                 cardEls[cIdx].setAttribute('data-deleted', 'true');
+              } else {
+                cardEls[cIdx].style.display = '';
+                cardEls[cIdx].removeAttribute('data-deleted');
               }
             }
           });
@@ -3262,9 +3283,12 @@
       });
     }
 
-    function resetToOriginal() {
-      if (confirm('Bạn có chắc muốn xóa các chỉnh sửa và khôi phục về nội dung gốc ban đầu?')) {
+    async function resetToOriginal() {
+      if (confirm('Bạn có chắc muốn xóa mọi chỉnh sửa và khôi phục TOÀN BỘ 12 SLIDE về nguyên bản ban đầu không?\n\n(Lưu ý: Mọi chỉnh sửa của cả nhóm sẽ được đưa về mặc định và đồng bộ lại trên Cloud)')) {
         localStorage.removeItem('sdg14_slides_custom_data');
+        try {
+          await syncToCloud([]);
+        } catch(e) {}
         location.reload();
       }
     }
