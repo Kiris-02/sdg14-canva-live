@@ -273,9 +273,36 @@
     .border-blue::before { background: #60a5fa; box-shadow: 0 0 15px #60a5fa; }
     .border-rose::before { background: #fb7185; box-shadow: 0 0 15px #fb7185; }
 
-    .card-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #94a3b8; margin-bottom: 0.5rem; }
-    .card-stat { font-family: 'Space Grotesk', sans-serif; font-size: 2.35rem; font-weight: 700; color: #ffffff; margin-bottom: 0.5rem; line-height: 1.15; }
-    .card-desc { font-size: 0.95rem; color: #cbd5e1; line-height: 1.55; }
+    .card-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+    }
+    .card-stat {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 0, 0, 0.85);
+    }
+    .card-desc {
+      font-size: 0.95rem;
+      color: #f1f5f9;
+      line-height: 1.55;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+    }
 
     /* Bottom HUD and Autohide */
     .hud-bottom {
@@ -1287,10 +1314,18 @@
         <span class="ci-color-dot" style="background:rgba(15,23,42,0.85); border-color:#94a3b8;" onclick="setElementColor('rgba(15,23,42,0.85)', '')" title="Kính Mờ Tối"></span>
       </div>
 
-      <!-- Opacity Slider -->
-      <div class="ci-group ci-slider-wrap" title="Độ mờ kính trong suốt">
-        <span>Độ mờ:</span>
-        <input type="range" class="ci-slider" id="ci-opacity" min="20" max="100" value="85" oninput="setElementOpacity(this.value)">
+      <!-- Box / Background Glass Opacity Slider -->
+      <div class="ci-group ci-slider-wrap" title="Độ trong suốt của Nền Ô / Khung kính (chữ bên trong vẫn luôn sáng rõ 100%)">
+        <span>Nền ô:</span>
+        <input type="range" class="ci-slider" id="ci-bg-opacity" min="0" max="100" value="72" oninput="setElementBgOpacity(this.value)">
+        <span id="ci-bg-opacity-val" style="min-width: 28px; font-size: 11px; color: #38bdf8; font-weight: 600;">72%</span>
+      </div>
+
+      <!-- Text / Content Opacity Slider -->
+      <div class="ci-group ci-slider-wrap" title="Độ mờ của Chữ / Nội dung bên trong (độc lập hoàn toàn với nền ô)">
+        <span>Chữ:</span>
+        <input type="range" class="ci-slider" id="ci-text-opacity" min="20" max="100" value="100" oninput="setElementTextOpacity(this.value)">
+        <span id="ci-text-opacity-val" style="min-width: 28px; font-size: 11px; color: #38bdf8; font-weight: 600;">100%</span>
       </div>
 
       <!-- Font Sizing -->
@@ -2931,10 +2966,37 @@
       selectedElement.classList.add('canva-selected');
       updateInspectorPosition();
 
-      // Read current opacity
-      if (ciOpacity) {
-        const curOp = window.getComputedStyle(selectedElement).opacity;
-        ciOpacity.value = Math.round(parseFloat(curOp || 1) * 100);
+      // Read current background opacity & text opacity
+      const ciBgOpacity = document.getElementById('ci-bg-opacity');
+      const ciBgVal = document.getElementById('ci-bg-opacity-val');
+      if (ciBgOpacity) {
+        let curBgOp = selectedElement.dataset.bgOpacity;
+        if (curBgOp === undefined || curBgOp === '') {
+          // If legacy element has style.opacity < 1, migrate it immediately to background opacity!
+          if (selectedElement.style.opacity && parseFloat(selectedElement.style.opacity) < 1) {
+            curBgOp = Math.round(parseFloat(selectedElement.style.opacity) * 100);
+            selectedElement.dataset.bgOpacity = curBgOp;
+            if (selectedElement.classList.contains('metric-card')) {
+              selectedElement.style.background = `rgba(15, 23, 42, ${(curBgOp / 100).toFixed(2)})`;
+            }
+            selectedElement.style.opacity = '1';
+          } else {
+            curBgOp = selectedElement.classList.contains('metric-card') ? 72 : 85;
+          }
+        }
+        ciBgOpacity.value = curBgOp;
+        if (ciBgVal) ciBgVal.textContent = `${curBgOp}%`;
+      }
+
+      const ciTextOpacity = document.getElementById('ci-text-opacity');
+      const ciTextVal = document.getElementById('ci-text-opacity-val');
+      if (ciTextOpacity) {
+        let curTextOp = selectedElement.dataset.textOpacity;
+        if (curTextOp === undefined || curTextOp === '') {
+          curTextOp = 100;
+        }
+        ciTextOpacity.value = curTextOp;
+        if (ciTextVal) ciTextVal.textContent = `${curTextOp}%`;
       }
 
       if (canvaInspector) canvaInspector.classList.remove('hidden');
@@ -2980,10 +3042,47 @@
       showToast('🎨 Đã cập nhật màu sắc thành công!');
     }
 
-    // Opacity Setting
-    function setElementOpacity(val) {
+    // Box / Background Opacity Setting (Separated from text)
+    function setElementBgOpacity(val) {
       if (!selectedElement) return;
-      selectedElement.style.opacity = val / 100;
+      val = Math.max(0, Math.min(100, parseInt(val)));
+      selectedElement.dataset.bgOpacity = val;
+      const valEl = document.getElementById('ci-bg-opacity-val');
+      if (valEl) valEl.textContent = `${val}%`;
+
+      // Crucial: Container opacity must ALWAYS be 1 so children/text are never dimmed
+      selectedElement.style.opacity = '1';
+
+      if (selectedElement.classList.contains('metric-card')) {
+        selectedElement.style.background = `rgba(15, 23, 42, ${(val / 100).toFixed(2)})`;
+      } else if (selectedElement.classList.contains('pill') || selectedElement.classList.contains('custom-shape')) {
+        selectedElement.style.backgroundColor = `rgba(15, 23, 42, ${(val / 100).toFixed(2)})`;
+      } else {
+        selectedElement.style.backgroundColor = `rgba(15, 23, 42, ${(val / 100).toFixed(2)})`;
+      }
+    }
+
+    // Text / Content Opacity Setting (Separated from box)
+    function setElementTextOpacity(val) {
+      if (!selectedElement) return;
+      val = Math.max(10, Math.min(100, parseInt(val)));
+      selectedElement.dataset.textOpacity = val;
+      const valEl = document.getElementById('ci-text-opacity-val');
+      if (valEl) valEl.textContent = `${val}%`;
+
+      const top = (val / 100).toFixed(2);
+      if (selectedElement.classList.contains('metric-card')) {
+        selectedElement.querySelectorAll('.card-label, .card-stat, .card-desc').forEach(el => {
+          el.style.opacity = top;
+        });
+      } else {
+        selectedElement.style.opacity = top;
+      }
+    }
+
+    // Backwards-compatible alias
+    function setElementOpacity(val) {
+      setElementBgOpacity(val);
     }
 
     // Font Size Setting
@@ -3220,7 +3319,7 @@
           customElements: []
         };
 
-        // Capture Cards & Styles
+        // Capture Cards & Styles (Separated Box vs Text Opacity)
         slideEl.querySelectorAll('.metric-card').forEach((cardEl, cIdx) => {
           item.cards.push({
             label: cardEl.querySelector('.card-label')?.innerText.trim() || '',
@@ -3228,7 +3327,10 @@
             desc: cardEl.querySelector('.card-desc')?.innerText.trim() || '',
             className: cardEl.className,
             transform: cardEl.style.transform || '',
-            opacity: cardEl.style.opacity || '',
+            opacity: '1', // Container is always 1 so children are never dimmed!
+            bgOpacity: cardEl.dataset.bgOpacity || (cardEl.style.background ? '' : '72'),
+            textOpacity: cardEl.dataset.textOpacity || '100',
+            background: cardEl.style.background || '',
             width: cardEl.style.width || '',
             height: cardEl.style.height || '',
             isDeleted: cardEl.getAttribute('data-deleted') === 'true'
@@ -3395,25 +3497,56 @@
           if (el) el.innerText = item.subtitle;
         }
 
-        // 2. Cards & Card Styles
+        // 2. Cards & Card Styles (Separated Box vs Text Opacity)
         if (item.cards) {
           const cardEls = slideEl.querySelectorAll('.metric-card');
           item.cards.forEach((c, cIdx) => {
             if (cardEls[cIdx]) {
-              if (c.label) cardEls[cIdx].querySelector('.card-label').innerText = c.label;
-              if (c.stat) cardEls[cIdx].querySelector('.card-stat').innerText = c.stat;
-              if (c.desc) cardEls[cIdx].querySelector('.card-desc').innerText = c.desc;
-              if (c.className) cardEls[cIdx].className = c.className;
-              if (c.transform) cardEls[cIdx].style.transform = c.transform;
-              if (c.opacity) cardEls[cIdx].style.opacity = c.opacity;
-              if (c.width) cardEls[cIdx].style.width = c.width;
-              if (c.height) cardEls[cIdx].style.height = c.height;
-              if (c.isDeleted) {
-                cardEls[cIdx].style.display = 'none';
-                cardEls[cIdx].setAttribute('data-deleted', 'true');
+              const cardEl = cardEls[cIdx];
+              if (c.label) cardEl.querySelector('.card-label').innerText = c.label;
+              if (c.stat) cardEl.querySelector('.card-stat').innerText = c.stat;
+              if (c.desc) cardEl.querySelector('.card-desc').innerText = c.desc;
+              if (c.className) cardEl.className = c.className;
+              if (c.transform) cardEl.style.transform = c.transform;
+
+              // CRITICAL: Separate Box Opacity vs Text Opacity
+              // Convert any legacy c.opacity < 1 into background opacity so text is NOT dimmed!
+              let bgOp = c.bgOpacity;
+              if ((bgOp === undefined || bgOp === '') && c.opacity && parseFloat(c.opacity) < 1) {
+                bgOp = Math.round(parseFloat(c.opacity) * 100);
+              }
+
+              if (bgOp !== undefined && bgOp !== '') {
+                cardEl.dataset.bgOpacity = bgOp;
+                cardEl.style.background = `rgba(15, 23, 42, ${(parseFloat(bgOp) / 100).toFixed(2)})`;
+              } else if (c.background) {
+                cardEl.style.background = c.background;
+              }
+
+              // Container is ALWAYS 1 so text is never dimmed by card box
+              cardEl.style.opacity = '1';
+
+              // Text Opacity applied directly to text elements
+              if (c.textOpacity !== undefined && c.textOpacity !== '') {
+                cardEl.dataset.textOpacity = c.textOpacity;
+                const top = (parseFloat(c.textOpacity) / 100).toFixed(2);
+                cardEl.querySelectorAll('.card-label, .card-stat, .card-desc').forEach(el => {
+                  el.style.opacity = top;
+                });
               } else {
-                cardEls[cIdx].style.display = '';
-                cardEls[cIdx].removeAttribute('data-deleted');
+                cardEl.querySelectorAll('.card-label, .card-stat, .card-desc').forEach(el => {
+                  el.style.opacity = '1';
+                });
+              }
+
+              if (c.width) cardEl.style.width = c.width;
+              if (c.height) cardEl.style.height = c.height;
+              if (c.isDeleted) {
+                cardEl.style.display = 'none';
+                cardEl.setAttribute('data-deleted', 'true');
+              } else {
+                cardEl.style.display = '';
+                cardEl.removeAttribute('data-deleted');
               }
             }
           });
