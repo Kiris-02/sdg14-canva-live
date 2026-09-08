@@ -91,6 +91,17 @@
       z-index: 3;
       pointer-events: none;
     }
+    #dreamscape-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
     /* --- 5. Soft Vignette Overlay --- */
     .cinematic-vignette {
@@ -1160,6 +1171,9 @@
   <!-- Layer 3: Ambient Micro-Bubbles Canvas -->
   <canvas id="marine-canvas"></canvas>
 
+  <!-- Layer 3.5: Celestial Ocean Dreamscape Canvas (Hollywood Masterwork // 60FPS) -->
+  <canvas id="dreamscape-canvas"></canvas>
+
   <!-- Layer 4: Soft Vignette -->
   <div class="cinematic-vignette"></div>
 
@@ -1204,7 +1218,7 @@
         <button id="btn-save-edits" class="btn-tb btn-tb-save">☁️ Lưu & Đồng bộ cả nhóm</button>
         <button id="btn-download-html" class="btn-tb">📥 Tải file HTML mới</button>
         <button id="btn-restore-slide" class="btn-tb" style="background: rgba(245, 158, 11, 0.2); border-color:#f59e0b; color:#fbbf24;" onclick="restoreCurrentSlide()" title="Khôi phục riêng Slide đang xem về nguyên bản">🔄 Khôi phục Slide này</button>
-        <button id="btn-reset-edits" class="btn-tb btn-tb-danger" title="Khôi phục toàn bộ 12 slide về mặc định">🔄 Khôi phục cả 12 Slide</button>
+        <button id="btn-reset-edits" class="btn-tb btn-tb-danger" title="Khôi phục toàn bộ 14 slide về mặc định">🔄 Khôi phục cả 14 Slide</button>
         <button id="btn-close-edit" class="btn-tb btn-tb-close" title="Đóng chế độ sửa [Esc]">✖</button>
       </div>
     </div>
@@ -1300,8 +1314,122 @@
     </div>
 
     <div class="slide-viewport">
+      <!-- SLIDE 01: INTRODUCTION (CELESTIAL DAWN // HORIZON) -->
+      <section class="slide active" data-depth="CELESTIAL DAWN // HORIZON" data-bg="bg-surface" data-index="0">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">GLOBAL GOAL 14</span>
+          <span class="pill pill-question">CHUYÊN ĐỀ MỞ ĐẦU</span>
+          <span class="pill pill-speaker">SDG 14 OVERVIEW</span>
+        </div>
+        <h1 class="slide-title" style="font-size: 64px; font-weight: 800; letter-spacing: -0.02em; margin-top: 1.5rem; margin-bottom: 1.25rem;">Introduction</h1>
+        <p class="slide-subtitle" style="font-size: 20px; max-width: 860px; line-height: 1.6; opacity: 0.92;">SDG 14: Life Below Water — Bảo Tồn và Sử Dụng Bền Vững Đại Dương, Biển và Nguồn Tài Nguyên Biển Cho Phát Triển Bền Vững</p>
+      </section>
+
+      <!-- SLIDE 02: THÀNH VIÊN NHÓM (CELESTIAL TWILIGHT // AURORA) -->
+      <section class="slide" data-depth="CELESTIAL TWILIGHT // AURORA" data-bg="bg-surface" data-index="1">
+        <div class="slide-meta-row">
+          <span class="pill pill-target">ĐỘI NGŨ THỰC HIỆN</span>
+          <span class="pill pill-question">6 THÀNH VIÊN BÁO CÁO</span>
+          <span class="pill pill-speaker">SDG 14 RESEARCH TEAM</span>
+        </div>
+        <h1 class="slide-title" style="font-size: 42px; font-weight: 800; margin-top: 0.75rem; margin-bottom: 0.5rem;">Thành Viên Nhóm</h1>
+        <p class="slide-subtitle" style="font-size: 15.5px; opacity: 0.88; margin-bottom: 1.5rem;">Phân công trách nhiệm và điều phối chuyên đề 3 phân hệ mục tiêu toàn cầu</p>
+        <div class="metrics-grid">
+          
+          <div class="metric-card border-cyan" style="padding: 1.25rem 1.5rem;">
+            <!-- Action Controls for This Card -->
+            <div class="card-action-bar">
+              <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+              <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+              <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+              <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+              <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+              <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+            </div>
+            <div class="card-label">THÀNH VIÊN 01 // DIỄN GIẢ 1</div>
+            <div class="card-stat" style="font-size: 1.75rem;">Thành viên 1</div>
+            <div class="card-desc" style="font-size: 0.85rem; line-height: 1.5;">Mục tiêu 14.1: Nguồn gốc ô nhiễm biển & Thực trạng rác thải nông nghiệp, hóa chất</div>
+          </div>
+
+          <div class="metric-card border-cyan" style="padding: 1.25rem 1.5rem;">
+            <!-- Action Controls for This Card -->
+            <div class="card-action-bar">
+              <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+              <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+              <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+              <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+              <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+              <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+            </div>
+            <div class="card-label">THÀNH VIÊN 02 // DIỄN GIẢ 2</div>
+            <div class="card-stat" style="font-size: 1.75rem;">Thành viên 2</div>
+            <div class="card-desc" style="font-size: 0.85rem; line-height: 1.5;">Mục tiêu 14.1: Chỉ số vi nhựa, Quan trắc ô nhiễm & Giải pháp kinh tế tuần hoàn</div>
+          </div>
+
+          <div class="metric-card border-cyan" style="padding: 1.25rem 1.5rem;">
+            <!-- Action Controls for This Card -->
+            <div class="card-action-bar">
+              <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+              <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+              <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+              <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+              <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+              <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+            </div>
+            <div class="card-label">THÀNH VIÊN 03 // DIỄN GIẢ 3</div>
+            <div class="card-stat" style="font-size: 1.75rem;">Thành viên 3</div>
+            <div class="card-desc" style="font-size: 0.85rem; line-height: 1.5;">Mục tiêu 14.2: Phục hồi hệ sinh thái biển ven bờ & Đa dạng sinh học rạn san hô</div>
+          </div>
+
+          <div class="metric-card border-cyan" style="padding: 1.25rem 1.5rem;">
+            <!-- Action Controls for This Card -->
+            <div class="card-action-bar">
+              <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+              <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+              <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+              <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+              <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+              <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+            </div>
+            <div class="card-label">THÀNH VIÊN 04 // DIỄN GIẢ 4</div>
+            <div class="card-stat" style="font-size: 1.75rem;">Thành viên 4</div>
+            <div class="card-desc" style="font-size: 0.85rem; line-height: 1.5;">Mục tiêu 14.2: Giám sát sinh thái bằng cảm biến IoT & Khu bảo tồn biển (MPAs)</div>
+          </div>
+
+          <div class="metric-card border-cyan" style="padding: 1.25rem 1.5rem;">
+            <!-- Action Controls for This Card -->
+            <div class="card-action-bar">
+              <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+              <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+              <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+              <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+              <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+              <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+            </div>
+            <div class="card-label">THÀNH VIÊN 05 // DIỄN GIẢ 5</div>
+            <div class="card-stat" style="font-size: 1.75rem;">Thành viên 5</div>
+            <div class="card-desc" style="font-size: 0.85rem; line-height: 1.5;">Mục tiêu 14.3: Hiện tượng axit hóa đại dương & Tổn thương sinh vật có vỏ vôi</div>
+          </div>
+
+          <div class="metric-card border-cyan" style="padding: 1.25rem 1.5rem;">
+            <!-- Action Controls for This Card -->
+            <div class="card-action-bar">
+              <span class="cab-btn cab-btn-drag" title="Bấm giữ để kéo thẻ đi bất cứ đâu">✥ Kéo</span>
+              <button class="cab-btn" onclick="toggleCardBottomRow(this)" title="Chuyển thẻ xuống hàng dưới / lên trên">⬇ Xuống dưới</button>
+              <button class="cab-btn" onclick="moveCard(this, -1)" title="Đổi chỗ sang trái">◀</button>
+              <button class="cab-btn" onclick="moveCard(this, 1)" title="Đổi chỗ sang phải">▶</button>
+              <button class="cab-btn" onclick="cycleCardColor(this)" title="Đổi màu viền thẻ">🎨</button>
+              <button class="cab-btn cab-btn-del" onclick="deleteCard(this)" title="Xóa ô thẻ này">🗑️ Xóa</button>
+            </div>
+            <div class="card-label">THÀNH VIÊN 06 // DIỄN GIẢ 6</div>
+            <div class="card-stat" style="font-size: 1.75rem;">Thành viên 6</div>
+            <div class="card-desc" style="font-size: 0.85rem; line-height: 1.5;">Mục tiêu 14.3: Mạng lưới phao Argo quan trắc toàn cầu & Thích ứng khí hậu</div>
+          </div>
+        </div>
+      </section>
+
       
-      <section class="slide active" data-depth="0M • SUNLIGHT SURFACE" data-bg="bg-surface" data-index="0">
+      <section class="slide" data-depth="0M • SUNLIGHT SURFACE" data-bg="bg-surface" data-index="2">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.1</span>
           <span class="pill pill-question">QUESTION 1 • TARGET AIM</span>
@@ -1358,7 +1486,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="100M • SURFACE MIXED LAYER" data-bg="bg-surface" data-index="1">
+      <section class="slide" data-depth="100M • SURFACE MIXED LAYER" data-bg="bg-surface" data-index="3">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.1</span>
           <span class="pill pill-question">QUESTION 2 • OFFICIAL INDICATORS</span>
@@ -1415,7 +1543,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="180M • COASTAL SHELF" data-bg="bg-surface" data-index="2">
+      <section class="slide" data-depth="180M • COASTAL SHELF" data-bg="bg-surface" data-index="4">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.1</span>
           <span class="pill pill-question">QUESTION 3 • MEASUREMENT METHODS</span>
@@ -1472,7 +1600,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="200M • SUNLIGHT BOUNDARY" data-bg="bg-surface" data-index="3">
+      <section class="slide" data-depth="200M • SUNLIGHT BOUNDARY" data-bg="bg-surface" data-index="5">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.1</span>
           <span class="pill pill-question">QUESTION 4 • INSTITUTIONS & GOVERNANCE</span>
@@ -1529,7 +1657,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="350M • UPPER REEF BIOME" data-bg="bg-coral" data-index="4">
+      <section class="slide" data-depth="350M • UPPER REEF BIOME" data-bg="bg-coral" data-index="6">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.2</span>
           <span class="pill pill-question">QUESTION 1 • TARGET AIM</span>
@@ -1586,7 +1714,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="500M • LIVING CORAL REEF" data-bg="bg-coral" data-index="5">
+      <section class="slide" data-depth="500M • LIVING CORAL REEF" data-bg="bg-coral" data-index="7">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.2</span>
           <span class="pill pill-question">QUESTION 2 • OFFICIAL INDICATORS</span>
@@ -1643,7 +1771,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="700M • MESOPELAGIC REEF WALL" data-bg="bg-coral" data-index="6">
+      <section class="slide" data-depth="700M • MESOPELAGIC REEF WALL" data-bg="bg-coral" data-index="8">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.2</span>
           <span class="pill pill-question">QUESTION 3 • MEASUREMENT METHODS</span>
@@ -1700,7 +1828,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="900M • TWILIGHT ENTRANCE" data-bg="bg-coral" data-index="7">
+      <section class="slide" data-depth="900M • TWILIGHT ENTRANCE" data-bg="bg-coral" data-index="9">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.2</span>
           <span class="pill pill-question">QUESTION 4 • INSTITUTIONS & GOVERNANCE</span>
@@ -1757,7 +1885,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="1,200M • BATHYPELAGIC ENTRANCE" data-bg="bg-abyss" data-index="8">
+      <section class="slide" data-depth="1,200M • BATHYPELAGIC ENTRANCE" data-bg="bg-abyss" data-index="10">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.3</span>
           <span class="pill pill-question">QUESTION 1 • TARGET AIM</span>
@@ -1814,7 +1942,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="1,800M • MID-BATHYPELAGIC" data-bg="bg-abyss" data-index="9">
+      <section class="slide" data-depth="1,800M • MID-BATHYPELAGIC" data-bg="bg-abyss" data-index="11">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.3</span>
           <span class="pill pill-question">QUESTION 2 • OFFICIAL INDICATORS</span>
@@ -1871,7 +1999,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="2,200M • LOWER BATHYPELAGIC" data-bg="bg-abyss" data-index="10">
+      <section class="slide" data-depth="2,200M • LOWER BATHYPELAGIC" data-bg="bg-abyss" data-index="12">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.3</span>
           <span class="pill pill-question">QUESTION 3 • MEASUREMENT METHODS</span>
@@ -1928,7 +2056,7 @@
         </div>
       </section>
 
-      <section class="slide" data-depth="2,500M • ABYSSAL FLOOR" data-bg="bg-abyss" data-index="11">
+      <section class="slide" data-depth="2,500M • ABYSSAL FLOOR" data-bg="bg-abyss" data-index="13">
         <div class="slide-meta-row">
           <span class="pill pill-target">TARGET 14.3</span>
           <span class="pill pill-question">QUESTION 4 • INSTITUTIONS & GOVERNANCE</span>
@@ -1991,24 +2119,26 @@
       
       <!-- Direct Slide Jump Bar -->
       <div class="slide-dots-bar">
-        <button class="dot-btn active" onclick="jumpToSlide(0)" title="Slide 01: TARGET 14.1">01</button>
-<button class="dot-btn" onclick="jumpToSlide(1)" title="Slide 02: TARGET 14.1">02</button>
-<button class="dot-btn" onclick="jumpToSlide(2)" title="Slide 03: TARGET 14.1">03</button>
-<button class="dot-btn" onclick="jumpToSlide(3)" title="Slide 04: TARGET 14.1">04</button>
-<button class="dot-btn" onclick="jumpToSlide(4)" title="Slide 05: TARGET 14.2">05</button>
-<button class="dot-btn" onclick="jumpToSlide(5)" title="Slide 06: TARGET 14.2">06</button>
-<button class="dot-btn" onclick="jumpToSlide(6)" title="Slide 07: TARGET 14.2">07</button>
-<button class="dot-btn" onclick="jumpToSlide(7)" title="Slide 08: TARGET 14.2">08</button>
-<button class="dot-btn" onclick="jumpToSlide(8)" title="Slide 09: TARGET 14.3">09</button>
-<button class="dot-btn" onclick="jumpToSlide(9)" title="Slide 10: TARGET 14.3">10</button>
-<button class="dot-btn" onclick="jumpToSlide(10)" title="Slide 11: TARGET 14.3">11</button>
-<button class="dot-btn" onclick="jumpToSlide(11)" title="Slide 12: TARGET 14.3">12</button>
+        <button class="dot-btn active" onclick="jumpToSlide(0)" title="Slide 01: INTRODUCTION">01</button>
+        <button class="dot-btn" onclick="jumpToSlide(1)" title="Slide 02: THÀNH VIÊN NHÓM">02</button>
+        <button class="dot-btn" onclick="jumpToSlide(2)" title="Slide 03: TARGET 14.1">03</button>
+        <button class="dot-btn" onclick="jumpToSlide(3)" title="Slide 04: TARGET 14.1">04</button>
+        <button class="dot-btn" onclick="jumpToSlide(4)" title="Slide 05: TARGET 14.1">05</button>
+        <button class="dot-btn" onclick="jumpToSlide(5)" title="Slide 06: TARGET 14.1">06</button>
+        <button class="dot-btn" onclick="jumpToSlide(6)" title="Slide 07: TARGET 14.2">07</button>
+        <button class="dot-btn" onclick="jumpToSlide(7)" title="Slide 08: TARGET 14.2">08</button>
+        <button class="dot-btn" onclick="jumpToSlide(8)" title="Slide 09: TARGET 14.2">09</button>
+        <button class="dot-btn" onclick="jumpToSlide(9)" title="Slide 10: TARGET 14.2">10</button>
+        <button class="dot-btn" onclick="jumpToSlide(10)" title="Slide 11: TARGET 14.3">11</button>
+        <button class="dot-btn" onclick="jumpToSlide(11)" title="Slide 12: TARGET 14.3">12</button>
+        <button class="dot-btn" onclick="jumpToSlide(12)" title="Slide 13: TARGET 14.3">13</button>
+        <button class="dot-btn" onclick="jumpToSlide(13)" title="Slide 14: TARGET 14.3">14</button>
       </div>
 
       <!-- Arrow Controls & Counter -->
       <div class="nav-controls">
         <button class="btn-nav" id="btn-prev" title="Previous Slide (ArrowLeft / PageUp)">‹</button>
-        <div class="slide-counter"><span id="curr-slide">01</span> / 12</div>
+        <div class="slide-counter"><span id="curr-slide">01</span> / 14</div>
         <button class="btn-nav" id="btn-next" title="Next Slide (ArrowRight / Space / PageDown)">›</button>
       </div>
 
@@ -2150,6 +2280,22 @@
       const activeSlide = slides[currentIndex];
       if (!activeSlide) return;
 
+      // Celestial Dreamscape (Slide 1 & 2) vs Underwater 3D (Slides 3-14)
+      if (currentIndex === 0) {
+        targetAtmosphere = 0.0; // 100% Dawn (Rạng Đông Vàng Biếc)
+        targetDreamscapeAlpha = 1.0;
+        if (depthDisplay) depthDisplay.textContent = 'DEPTH: CELESTIAL HORIZON // RẠNG ĐÔNG';
+      } else if (currentIndex === 1) {
+        targetAtmosphere = 1.0; // 100% Twilight Aurora (Hoàng Hôn Cực Quang)
+        targetDreamscapeAlpha = 1.0;
+        if (depthDisplay) depthDisplay.textContent = 'DEPTH: CELESTIAL TWILIGHT // CỰC QUANG';
+      } else {
+        targetDreamscapeAlpha = 0.0; // Fades out smoothly into deep ocean
+        if (depthDisplay && activeSlide.dataset.depth) {
+          depthDisplay.textContent = `DEPTH: ${activeSlide.dataset.depth.toUpperCase()}`;
+        }
+      }
+
       const targetBgId = activeSlide.dataset.bg;
       bgLayers.forEach(bg => {
         bg.classList.toggle('active', bg.id === targetBgId);
@@ -2165,14 +2311,10 @@
         }
       }
 
-      if (depthDisplay && activeSlide.dataset.depth) {
-        depthDisplay.textContent = `DEPTH: ${activeSlide.dataset.depth.toUpperCase()}`;
-      }
       if (currSlideDisplay) {
         currSlideDisplay.textContent = String(currentIndex + 1).padStart(2, '0');
       }
     }
-
     function jumpToSlide(idx) {
       updateSlide(idx);
       resetActivity();
@@ -3211,8 +3353,16 @@
     function renderDataToDOM(data) {
       if (!data || !data.length) return;
       const slidesList = document.querySelectorAll('.slide');
+      
+      // Legacy migration: if saved data has 12 slides and current deck has 14 slides,
+      // shift the 12 slides to indices 2 through 13 so Slide 1 (Intro) & Slide 2 (Team) are preserved
+      const isLegacy12 = (data.length === 12 && slidesList.length === 14);
+
       data.forEach(item => {
-        const sIdx = item.num - 1;
+        let sIdx = item.num - 1;
+        if (isLegacy12) {
+          sIdx = item.num - 1 + 2;
+        }
         const slideEl = slidesList[sIdx];
         if (!slideEl) return;
         
@@ -3382,10 +3532,11 @@
     }
 
     async function resetToOriginal() {
-      if (confirm('Bạn có chắc muốn xóa mọi chỉnh sửa và khôi phục TOÀN BỘ 12 SLIDE về nguyên bản ban đầu không?\n\n(Lưu ý: Mọi chỉnh sửa của cả nhóm sẽ được đưa về mặc định và đồng bộ lại trên Cloud)')) {
+      if (confirm('Bạn có chắc muốn xóa mọi chỉnh sửa và khôi phục TOÀN BỘ 14 SLIDE về nguyên bản ban đầu không?\n\n(Lưu ý: Mọi chỉnh sửa của cả nhóm sẽ được đưa về mặc định và đồng bộ lại trên Cloud)')) {
         localStorage.removeItem('sdg14_slides_custom_data');
         try {
-          await syncToCloud([]);
+          const freshData = extractSlidesData();
+          await syncToCloud(freshData);
         } catch(e) {}
         location.reload();
       }
@@ -3614,6 +3765,621 @@
       requestAnimationFrame(renderBubbles);
     }
     renderBubbles();
+
+    /* ==========================================================================
+       CELESTIAL OCEAN DREAMSCAPE ENGINE (HOLLYWOOD MASTERWORK // 60FPS)
+       Continuous real-time lerp between Dawn (Slide 1) and Twilight Aurora (Slide 2)
+       ========================================================================== */
+    const dreamscapeCanvas = document.getElementById('dreamscape-canvas');
+    const dreamCtx = dreamscapeCanvas ? dreamscapeCanvas.getContext('2d') : null;
+    let dreamWidth = window.innerWidth;
+    let dreamHeight = window.innerHeight;
+    let dreamTime = 0;
+    let dreamAtmosphereFactor = 0.0; // 0.0 = 100% Dawn, 1.0 = 100% Twilight Aurora
+    let targetAtmosphere = 0.0;
+    let dreamscapeAlpha = 1.0;
+    let targetDreamscapeAlpha = 1.0;
+
+    let dreamMouseX = window.innerWidth / 2;
+    let dreamMouseY = window.innerHeight / 2;
+
+    window.addEventListener('mousemove', (e) => {
+      dreamMouseX = e.clientX;
+      dreamMouseY = e.clientY;
+    });
+
+    function resizeDreamCanvas() {
+      if (!dreamscapeCanvas) return;
+      dreamWidth = window.innerWidth;
+      dreamHeight = window.innerHeight;
+      dreamscapeCanvas.width = dreamWidth;
+      dreamscapeCanvas.height = dreamHeight;
+    }
+    window.addEventListener('resize', resizeDreamCanvas);
+    resizeDreamCanvas();
+
+    // Mist / Dew particles rising from sea of clouds
+    const mistParticles = [];
+    for (let i = 0; i < 75; i++) {
+      mistParticles.push({
+        x: Math.random() * 2500,
+        y: Math.random() * 1400,
+        radius: Math.random() * 3.5 + 1.2,
+        speedY: -(Math.random() * 0.7 + 0.35),
+        speedX: (Math.random() - 0.5) * 0.5,
+        alpha: Math.random() * 0.5 + 0.3,
+        pulse: Math.random() * Math.PI * 2
+      });
+    }
+
+    // Starfield for Twilight Aurora
+    const dreamStars = [];
+    for (let s = 0; s < 70; s++) {
+      dreamStars.push({
+        x: Math.random(),
+        y: Math.random() * 0.65,
+        size: Math.random() * 2.2 + 0.8,
+        twinkleSpeed: Math.random() * 2.5 + 1.0,
+        baseAlpha: Math.random() * 0.6 + 0.3
+      });
+    }
+
+    // Color Parser & Continuous Lerp Helper
+    function parseColorToRgba(str) {
+      if (!str) return [255, 255, 255, 1];
+      str = str.trim();
+      if (str.startsWith('#')) {
+        if (str.length === 4) {
+          return [
+            parseInt(str[1] + str[1], 16),
+            parseInt(str[2] + str[2], 16),
+            parseInt(str[3] + str[3], 16),
+            1
+          ];
+        } else {
+          return [
+            parseInt(str.substring(1, 3), 16),
+            parseInt(str.substring(3, 5), 16),
+            parseInt(str.substring(5, 7), 16),
+            1
+          ];
+        }
+      }
+      const m = str.match(/rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\s*\)/);
+      if (m) {
+        return [parseInt(m[1]), parseInt(m[2]), parseInt(m[3]), m[4] !== undefined ? parseFloat(m[4]) : 1];
+      }
+      return [255, 255, 255, 1];
+    }
+
+    function lerpColor(c1, c2, t) {
+      const p1 = parseColorToRgba(c1);
+      const p2 = parseColorToRgba(c2);
+      const r = Math.round(p1[0] + (p2[0] - p1[0]) * t);
+      const g = Math.round(p1[1] + (p2[1] - p1[1]) * t);
+      const b = Math.round(p1[2] + (p2[2] - p1[2]) * t);
+      const a = p1[3] + (p2[3] - p1[3]) * t;
+      return `rgba(${r}, ${g}, ${b}, ${Math.max(0, Math.min(1, a)).toFixed(3)})`;
+    }
+
+    function renderDreamscapeContinuous(ctx, w, h, t, targetOffsetX, targetOffsetY) {
+      dreamTime += 0.016;
+
+      // 1. Radiant Sky Gradient (Mathematical 60FPS Color Morph)
+      const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
+      const skyStops = [
+        { stop: 0.00, dawn: '#0284c7', twil: '#090a1a' },
+        { stop: 0.30, dawn: '#38bdf8', twil: '#1e1b4b' },
+        { stop: 0.53, dawn: '#7dd3fc', twil: '#312e81' },
+        { stop: 0.73, dawn: '#fef08a', twil: '#4c1d95' },
+        { stop: 0.90, dawn: '#fed7aa', twil: '#831843' },
+        { stop: 1.00, dawn: '#ffffff', twil: '#111827' }
+      ];
+      skyStops.forEach(s => {
+        skyGrad.addColorStop(s.stop, lerpColor(s.dawn, s.twil, t));
+      });
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // 2. Sky Atmospheric Phenomena: Sunbeams (Dawn) <---> Aurora Borealis & Stars (Twilight)
+      const sunAlpha = Math.max(0, Math.min(1, 1 - t));
+      const auroraAlpha = Math.max(0, Math.min(1, t));
+
+      if (sunAlpha > 0.01) {
+        ctx.save();
+        ctx.globalAlpha = sunAlpha;
+        const sunX = w * 0.22;
+        const sunY = -40;
+        for (let i = 0; i < 9; i++) {
+          const rayAngle = 0.30 + i * 0.14 + Math.sin(dreamTime * 0.35 + i) * 0.025;
+          const rayLength = h * 1.6;
+          const rayWidth = 85 + i * 18;
+          const rayGrad = ctx.createRadialGradient(sunX, sunY, 15, sunX + Math.cos(rayAngle) * rayLength, sunY + Math.sin(rayAngle) * rayLength, rayLength);
+          rayGrad.addColorStop(0, 'rgba(255, 255, 220, 0.28)');
+          rayGrad.addColorStop(0.5, 'rgba(254, 240, 138, 0.12)');
+          rayGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+          ctx.fillStyle = rayGrad;
+          ctx.beginPath();
+          ctx.moveTo(sunX, sunY);
+          ctx.lineTo(sunX + Math.cos(rayAngle - 0.07) * rayLength - rayWidth, sunY + Math.sin(rayAngle - 0.07) * rayLength);
+          ctx.lineTo(sunX + Math.cos(rayAngle + 0.07) * rayLength + rayWidth, sunY + Math.sin(rayAngle + 0.07) * rayLength);
+          ctx.closePath();
+          ctx.fill();
+        }
+        // Subtle Morning Prismatic Halo Arc
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+        ctx.lineWidth = 20;
+        ctx.beginPath();
+        ctx.arc(sunX, sunY, h * 0.75, 0.2, 1.4);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      if (auroraAlpha > 0.01) {
+        // Twinkling Starfield
+        ctx.save();
+        ctx.globalAlpha = auroraAlpha;
+        dreamStars.forEach(star => {
+          const sa = star.baseAlpha * (0.6 + Math.sin(dreamTime * star.twinkleSpeed) * 0.4);
+          ctx.fillStyle = `rgba(255, 255, 255, ${sa})`;
+          ctx.beginPath();
+          ctx.arc(star.x * w, star.y * h, star.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Twilight Aurora Borealis Ribbons
+        ctx.globalCompositeOperation = 'screen';
+        for (let a = 0; a < 3; a++) {
+          ctx.beginPath();
+          ctx.moveTo(0, h * 0.15 + a * 35);
+          for (let ax = 0; ax <= w; ax += 40) {
+            const ay = h * 0.15 + a * 35 + Math.sin(ax * 0.003 + dreamTime * 0.8 + a) * 45 + Math.cos(ax * 0.007 + dreamTime * 0.4) * 25;
+            ctx.lineTo(ax, ay);
+          }
+          ctx.lineTo(w, 0);
+          ctx.lineTo(0, 0);
+          ctx.closePath();
+          const auroraGrad = ctx.createLinearGradient(0, 0, 0, h * 0.35);
+          if (a === 0) {
+            auroraGrad.addColorStop(0, 'rgba(45, 212, 191, 0.25)');
+            auroraGrad.addColorStop(1, 'rgba(45, 212, 191, 0)');
+          } else if (a === 1) {
+            auroraGrad.addColorStop(0, 'rgba(168, 85, 247, 0.25)');
+            auroraGrad.addColorStop(1, 'rgba(168, 85, 247, 0)');
+          } else {
+            auroraGrad.addColorStop(0, 'rgba(244, 114, 182, 0.20)');
+            auroraGrad.addColorStop(1, 'rgba(244, 114, 182, 0)');
+          }
+          ctx.fillStyle = auroraGrad;
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      // 3. Verdant Floating Sky Islands Archipelago (Đảo Rừng Trời & Thác Nước)
+      const islX = w * 0.82 + targetOffsetX * 0.4;
+      const islY = h * 0.30 + Math.sin(dreamTime * 0.7) * 8;
+      ctx.save();
+      
+      // Floating Rock Crag Base
+      const rockGrad = ctx.createLinearGradient(islX, islY, islX, islY + 140);
+      rockGrad.addColorStop(0, lerpColor('#475569', '#1e1b4b', t));
+      rockGrad.addColorStop(0.6, lerpColor('#334155', '#0f172a', t));
+      rockGrad.addColorStop(1, lerpColor('#1e293b', '#020617', t));
+      ctx.fillStyle = rockGrad;
+      ctx.beginPath();
+      ctx.moveTo(islX - 120, islY);
+      ctx.bezierCurveTo(islX - 130, islY + 50, islX - 45, islY + 120, islX - 10, islY + 145);
+      ctx.bezierCurveTo(islX + 35, islY + 120, islX + 120, islY + 65, islX + 110, islY);
+      ctx.closePath();
+      ctx.fill();
+
+      // Glowing Runic Minerals / Crystals
+      ctx.fillStyle = lerpColor('#38bdf8', '#2dd4bf', t);
+      ctx.shadowColor = lerpColor('#0284c7', '#2dd4bf', t);
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(islX - 25, islY + 65);
+      ctx.lineTo(islX - 18, islY + 85);
+      ctx.lineTo(islX - 28, islY + 95);
+      ctx.lineTo(islX - 35, islY + 75);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(islX + 22, islY + 50);
+      ctx.lineTo(islX + 32, islY + 70);
+      ctx.lineTo(islX + 18, islY + 78);
+      ctx.closePath();
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Lush Emerald Moss & Turf Layer
+      ctx.fillStyle = lerpColor('#10b981', '#059669', t);
+      ctx.beginPath();
+      ctx.ellipse(islX - 5, islY - 2, 122, 28, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Ancient Sacred Sky Tree
+      const treeGrad = ctx.createLinearGradient(islX, islY - 70, islX, islY);
+      treeGrad.addColorStop(0, lerpColor('#34d399', '#10b981', t));
+      treeGrad.addColorStop(1, lerpColor('#047857', '#064e3b', t));
+      ctx.fillStyle = treeGrad;
+      ctx.beginPath();
+      ctx.arc(islX - 35, islY - 36, 32, 0, Math.PI * 2);
+      ctx.arc(islX + 15, islY - 45, 40, 0, Math.PI * 2);
+      ctx.arc(islX + 55, islY - 30, 26, 0, Math.PI * 2);
+      ctx.arc(islX - 5, islY - 58, 28, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Hanging Weeping Vines with Sway
+      ctx.strokeStyle = lerpColor('rgba(5, 150, 105, 0.8)', 'rgba(16, 185, 129, 0.8)', t);
+      ctx.lineWidth = 2.2;
+      for (let v = -90; v <= 80; v += 16) {
+        const vineLen = 45 + Math.sin(v * 2.5) * 30;
+        const sway = Math.sin(dreamTime * 1.6 + v) * 12;
+        ctx.beginPath();
+        ctx.moveTo(islX + v, islY + 12);
+        ctx.quadraticCurveTo(islX + v + sway * 0.5, islY + 12 + vineLen * 0.5, islX + v + sway, islY + 12 + vineLen);
+        ctx.stroke();
+      }
+
+      // Ethereal Infinity Waterfall cascading into void
+      const wfX = islX - 60;
+      const wfY = islY + 4;
+      const wfGrad = ctx.createLinearGradient(wfX, wfY, wfX, wfY + 130);
+      wfGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+      wfGrad.addColorStop(0.4, lerpColor('rgba(186, 230, 253, 0.7)', 'rgba(167, 243, 208, 0.7)', t));
+      wfGrad.addColorStop(0.85, lerpColor('rgba(224, 242, 254, 0.3)', 'rgba(110, 231, 183, 0.3)', t));
+      wfGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = wfGrad;
+      ctx.beginPath();
+      ctx.moveTo(wfX - 8, wfY);
+      ctx.lineTo(wfX + 8, wfY);
+      ctx.lineTo(wfX + 16 + Math.sin(dreamTime * 3.5) * 4, wfY + 120);
+      ctx.lineTo(wfX - 16 + Math.sin(dreamTime * 3.5) * 4, wfY + 120);
+      ctx.closePath();
+      ctx.fill();
+
+      // Secondary Satellite Spire Island (Far Right)
+      const satX = w * 0.94 + targetOffsetX * 0.25;
+      const satY = h * 0.44 + Math.cos(dreamTime * 0.6) * 6;
+      ctx.fillStyle = lerpColor('#475569', '#1e1b4b', t);
+      ctx.beginPath();
+      ctx.moveTo(satX - 35, satY);
+      ctx.bezierCurveTo(satX - 38, satY + 25, satX - 10, satY + 65, satX, satY + 75);
+      ctx.bezierCurveTo(satX + 15, satY + 60, satX + 38, satY + 30, satX + 35, satY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = lerpColor('#10b981', '#059669', t);
+      ctx.beginPath();
+      ctx.ellipse(satX, satY - 2, 38, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(satX, satY - 14, 14, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 4. Pod of Celestial Flying Cetaceans (Đàn Cá Voi Lướt Gió)
+      const whaleProgress = ((dreamTime * 24 + w * 0.42) % (w + 800)) - 220;
+      const whaleX = whaleProgress + targetOffsetX * 0.5;
+      const whaleY = h * 0.26 + Math.sin(dreamTime * 0.8) * 18;
+      
+      function drawCelestialWhale(cx, cy, scale, pitchOffset, isMother) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(scale, scale);
+        const pitch = Math.cos(dreamTime * 0.8 + pitchOffset) * 0.08;
+        ctx.rotate(pitch);
+
+        const whaleGrad = ctx.createLinearGradient(0, -30, 0, 35);
+        whaleGrad.addColorStop(0, lerpColor('#0369a1', '#3730a3', t));
+        whaleGrad.addColorStop(0.5, lerpColor('#0284c7', '#6366f1', t));
+        whaleGrad.addColorStop(0.85, lerpColor('#38bdf8', '#a855f7', t));
+        whaleGrad.addColorStop(1, lerpColor('#ffffff', '#fbcfe8', t));
+
+        ctx.fillStyle = whaleGrad;
+        ctx.beginPath();
+        ctx.moveTo(110, 0);
+        ctx.bezierCurveTo(75, -34, -30, -30, -105, -8);
+        const flukeSway = Math.sin(dreamTime * 2.2 + pitchOffset) * 15;
+        ctx.lineTo(-155, -24 + flukeSway);
+        ctx.lineTo(-142, flukeSway);
+        ctx.lineTo(-165, 20 + flukeSway);
+        ctx.bezierCurveTo(-115, 8, -40, 36, 45, 25);
+        ctx.bezierCurveTo(80, 20, 102, 12, 110, 0);
+        ctx.closePath();
+        ctx.fill();
+
+        // Bioluminescent Ventral Grooves
+        ctx.strokeStyle = lerpColor('rgba(255, 255, 255, 0.75)', 'rgba(244, 114, 182, 0.85)', t);
+        ctx.lineWidth = 1.8;
+        for (let g = 0; g < 4; g++) {
+          ctx.beginPath();
+          ctx.moveTo(75 - g * 14, 6 + g * 3);
+          ctx.quadraticCurveTo(15, 18 + g * 3, -45, 12 + g * 2);
+          ctx.stroke();
+        }
+
+        // Pectoral Fin with Hydrodynamic Fluid Wave
+        const finWave = Math.sin(dreamTime * 1.8 + pitchOffset) * 16;
+        ctx.fillStyle = lerpColor('#0284c7', '#4f46e5', t);
+        ctx.beginPath();
+        ctx.moveTo(28, 12);
+        ctx.quadraticCurveTo(-15, 32 + finWave, -40, 48 + finWave);
+        ctx.quadraticCurveTo(-12, 38 + finWave * 0.7, 12, 18);
+        ctx.closePath();
+        ctx.fill();
+
+        // Whale Eye
+        ctx.fillStyle = '#f59e0b';
+        ctx.shadowColor = '#fef08a';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(82, -6, 2.8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Bioluminescent Stardust Stream Trail
+        ctx.fillStyle = lerpColor('rgba(254, 240, 138, 0.85)', 'rgba(244, 114, 182, 0.85)', t);
+        for (let s = 0; s < 6; s++) {
+          const sparkX = -160 - s * 16 + Math.sin(dreamTime * 3 + s) * 6;
+          const sparkY = flukeSway + Math.cos(dreamTime * 3 + s) * 12;
+          ctx.beginPath();
+          ctx.arc(sparkX, sparkY, Math.random() * 2.2 + 1, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      // Draw Mother Whale & Calf
+      drawCelestialWhale(whaleX, whaleY, 1.0, 0, true);
+      drawCelestialWhale(whaleX - 85, whaleY - 45, 0.52, 0.6, false);
+
+      // 5. Giant Celestial Manta Ray (Gliding high)
+      const mantaProgress = (((dreamTime * 18 + 520) % (w + 700)) - 300);
+      const mantaX = mantaProgress + targetOffsetX * 0.3;
+      const mantaY = h * 0.14 + Math.cos(dreamTime * 0.6) * 12;
+      ctx.save();
+      ctx.translate(mantaX, mantaY);
+      const mantaWing = Math.sin(dreamTime * 2.0) * 12;
+      ctx.fillStyle = lerpColor('rgba(56, 189, 248, 0.88)', 'rgba(192, 132, 252, 0.88)', t);
+      ctx.beginPath();
+      ctx.moveTo(45, 0);
+      ctx.quadraticCurveTo(12, -32 - mantaWing, -18, -50 - mantaWing);
+      ctx.quadraticCurveTo(-12, -12, -40, 0);
+      ctx.quadraticCurveTo(-12, 12, -18, 50 + mantaWing);
+      ctx.quadraticCurveTo(12, 32 + mantaWing, 45, 0);
+      ctx.closePath();
+      ctx.fill();
+      // Manta Long Slender Whip Tail
+      ctx.strokeStyle = lerpColor('rgba(255, 255, 255, 0.8)', 'rgba(244, 114, 182, 0.8)', t);
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(-40, 0);
+      ctx.quadraticCurveTo(-80, Math.sin(dreamTime * 2.5) * 10, -120, Math.cos(dreamTime * 2.5) * 8);
+      ctx.stroke();
+      ctx.restore();
+
+      // 6. Flying Viking Fleet in the Clouds (Đoàn Thuyền Viking Bay Trên Mây)
+      function drawVikingDrakkar(vx, vy, scale, alpha, sailHue, rowCycle, isHero) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.translate(vx, vy);
+        ctx.scale(scale, scale);
+        const roll = Math.sin(dreamTime * 0.8 + rowCycle) * 0.035;
+        ctx.rotate(roll);
+
+        // Longship Hull
+        ctx.fillStyle = '#78350f';
+        ctx.beginPath();
+        ctx.moveTo(115, -16);
+        ctx.quadraticCurveTo(105, 20, 52, 26);
+        ctx.lineTo(-65, 26);
+        ctx.quadraticCurveTo(-102, 20, -112, -12);
+        ctx.quadraticCurveTo(-90, 14, -55, 16);
+        ctx.lineTo(65, 16);
+        ctx.quadraticCurveTo(100, 10, 115, -16);
+        ctx.closePath();
+        ctx.fill();
+
+        // Prow: Carved Dragon Neck & Head (Drakkar)
+        ctx.fillStyle = '#b45309';
+        ctx.beginPath();
+        ctx.moveTo(115, -16);
+        ctx.quadraticCurveTo(124, -28, 120, -42);
+        ctx.lineTo(128, -38);
+        ctx.lineTo(122, -24);
+        ctx.lineTo(118, -12);
+        ctx.closePath();
+        ctx.fill();
+
+        // Dragon Golden Eye
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(122, -34, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Viking Shields along Gunwales
+        const shieldColors = ['#dc2626', '#f59e0b', '#0284c7', '#ffffff', '#dc2626', '#f59e0b'];
+        for (let s = -48; s <= 48; s += 19) {
+          const sIdx = Math.floor((s + 48) / 19) % shieldColors.length;
+          ctx.fillStyle = shieldColors[sIdx];
+          ctx.beginPath();
+          ctx.arc(s, 16, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#78350f';
+          ctx.beginPath();
+          ctx.arc(s, 16, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Mast & Yardarm
+        ctx.strokeStyle = '#451a03';
+        ctx.lineWidth = 3.5;
+        ctx.beginPath();
+        ctx.moveTo(4, 16);
+        ctx.lineTo(4, -68);
+        ctx.stroke();
+
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(-35, -58);
+        ctx.lineTo(42, -58);
+        ctx.stroke();
+
+        // Mast Pennant / Banner
+        const flagWave = Math.sin(dreamTime * 2.8) * 6;
+        ctx.fillStyle = sailHue;
+        ctx.beginPath();
+        ctx.moveTo(4, -68);
+        ctx.lineTo(24, -65 + flagWave);
+        ctx.lineTo(4, -60);
+        ctx.closePath();
+        ctx.fill();
+
+        // Billowing Striped Canvas Sail
+        const sailBillow = Math.sin(dreamTime * 1.6) * 6;
+        ctx.fillStyle = sailHue;
+        ctx.beginPath();
+        ctx.moveTo(-32, -56);
+        ctx.quadraticCurveTo(5 + sailBillow, -58, 38, -56);
+        ctx.quadraticCurveTo(46 + sailBillow, -26, 35, 2);
+        ctx.quadraticCurveTo(5 + sailBillow, 6, -28, 2);
+        ctx.closePath();
+        ctx.fill();
+
+        // Ivory Sail Center Stripe
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.moveTo(-10, -57);
+        ctx.quadraticCurveTo(5 + sailBillow, -58, 16, -57);
+        ctx.quadraticCurveTo(20 + sailBillow, -26, 14, 3);
+        ctx.quadraticCurveTo(5 + sailBillow, 5, -8, 3);
+        ctx.closePath();
+        ctx.fill();
+
+        // Viking Rowers Silhouettes
+        ctx.fillStyle = '#1e293b';
+        for (let r = -40; r <= 40; r += 20) {
+          ctx.beginPath();
+          ctx.arc(r + 2, 8, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Synchronized Rowing Oars into Clouds
+        const rowAngle = 0.52 + Math.sin(rowCycle) * 0.36;
+        const rowDepth = Math.cos(rowCycle) * 8;
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 2.2;
+        for (let o = -46; o <= 46; o += 18) {
+          const oarLen = 46;
+          const tipX = o - Math.cos(rowAngle) * oarLen;
+          const tipY = 16 + Math.sin(rowAngle) * oarLen + rowDepth * 0.4;
+          ctx.beginPath();
+          ctx.moveTo(o, 16);
+          ctx.lineTo(tipX, tipY);
+          ctx.stroke();
+
+          // Cloud spray at oar tip
+          if (Math.sin(rowCycle) > 0.3) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+            ctx.beginPath();
+            ctx.arc(tipX, tipY, 4, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // Prow Cloud Bow Wave
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(75, 26, 18, 0, Math.PI * 2);
+        ctx.arc(102, 22, 15, 0, Math.PI * 2);
+        ctx.arc(54, 28, 14, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // Draw Hero Viking Flagship
+      const shipX = w * 0.52 + Math.sin(dreamTime * 0.4) * 15 + targetOffsetX * 0.4;
+      const shipY = h * 0.38 + Math.cos(dreamTime * 0.7) * 7;
+      drawVikingDrakkar(shipX, shipY, 0.96, 1.0, '#dc2626', dreamTime * 2.2, true);
+
+      // Distant Viking Ships
+      const distShip1X = w * 0.34 + Math.sin(dreamTime * 0.3) * 10 + targetOffsetX * 0.2;
+      const distShip1Y = h * 0.22 + Math.cos(dreamTime * 0.5) * 5;
+      drawVikingDrakkar(distShip1X, distShip1Y, 0.44, 0.76, '#0284c7', dreamTime * 2.2 + 1.2, false);
+
+      const distShip2X = w * 0.70 + Math.sin(dreamTime * 0.25) * 8 + targetOffsetX * 0.25;
+      const distShip2Y = h * 0.18 + Math.cos(dreamTime * 0.4) * 4;
+      drawVikingDrakkar(distShip2X, distShip2Y, 0.34, 0.65, '#d97706', dreamTime * 2.2 + 2.5, false);
+
+      // 7. Volumetric Sea of Clouds (Biển Mây Bồng Bềnh)
+      const cloudBaseY = h * 0.66;
+      ctx.save();
+      for (let c = -120; c < w + 240; c += 130) {
+        const puffY = cloudBaseY + Math.sin(c * 0.01 + dreamTime * 0.5) * 18;
+        const puffRad = 115 + Math.cos(c * 0.02) * 32;
+        const puffGrad = ctx.createRadialGradient(c, puffY, 15, c, puffY, puffRad);
+        puffGrad.addColorStop(0, 'rgba(255, 255, 255, 0.96)');
+        puffGrad.addColorStop(0.65, lerpColor('rgba(240, 249, 255, 0.75)', 'rgba(238, 242, 255, 0.7)', t));
+        puffGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = puffGrad;
+        ctx.beginPath();
+        ctx.arc(c, puffY, puffRad, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // 8. Rising Sparkling Moisture / Dew Particles (Hơi Nước Lơ Lửng)
+      ctx.save();
+      mistParticles.forEach((mp) => {
+        mp.x += mp.speedX;
+        mp.y += mp.speedY;
+        mp.pulse += 0.04;
+        if (mp.y < 0) {
+          mp.y = h + 20;
+          mp.x = Math.random() * w;
+        }
+        const alpha = mp.alpha * (0.65 + Math.sin(mp.pulse) * 0.35);
+        ctx.fillStyle = lerpColor(`rgba(255, 255, 255, ${alpha})`, `rgba(253, 224, 71, ${alpha})`, t);
+        ctx.shadowColor = lerpColor('#38bdf8', '#f472b6', t);
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(mp.x, mp.y, mp.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.restore();
+    }
+
+    // High-Performance 60FPS Dreamscape Animation Loop
+    function runDreamscapeLoop() {
+      requestAnimationFrame(runDreamscapeLoop);
+
+      // Smooth atmospheric transition (Dawn <-> Twilight Aurora)
+      dreamAtmosphereFactor += (targetAtmosphere - dreamAtmosphereFactor) * 0.045;
+
+      // Smooth layer opacity cross-fade (Slides 1 & 2 <-> Slides 3-14)
+      dreamscapeAlpha += (targetDreamscapeAlpha - dreamscapeAlpha) * 0.07;
+
+      if (!dreamscapeCanvas || !dreamCtx) return;
+
+      if (dreamscapeAlpha < 0.008) {
+        dreamscapeCanvas.style.opacity = '0';
+        dreamscapeCanvas.style.pointerEvents = 'none';
+        return;
+      }
+
+      dreamscapeCanvas.style.opacity = dreamscapeAlpha.toFixed(3);
+
+      const targetOffsetX = (dreamMouseX - dreamWidth / 2) * 0.04;
+      const targetOffsetY = (dreamMouseY - dreamHeight / 2) * 0.04;
+
+      renderDreamscapeContinuous(dreamCtx, dreamWidth, dreamHeight, dreamAtmosphereFactor, targetOffsetX, targetOffsetY);
+    }
+    runDreamscapeLoop();
+
 
     // Initialize Slide 01
     updateSlide(0);
