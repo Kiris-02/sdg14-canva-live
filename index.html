@@ -2418,7 +2418,7 @@
 
     function getEditableElements() {
       return document.querySelectorAll(
-        '.slide-title, .slide-subtitle, .pill, .card-label, .card-stat, .card-desc'
+        '.slide-title, .slide-subtitle, .pill, .depth-badge, .card-label, .card-stat, .card-desc'
       );
     }
 
@@ -2931,12 +2931,13 @@
     // Make elements selectable in Edit Mode
     function setupElementSelection() {
       const targets = document.querySelectorAll(
-        '.slide-title, .slide-subtitle, .pill, .metric-card, .custom-shape'
+        '.slide-title, .slide-subtitle, .pill, .slide-meta-row, .depth-badge, .card-label, .card-stat, .card-desc, .metric-card, .custom-shape'
       );
 
       targets.forEach(el => {
-        // Ensure corner resize handle exists
-        if (!el.querySelector('.canva-resize-handle')) {
+        // Only attach corner resize handle to large container boxes
+        const isBox = el.classList.contains('metric-card') || el.classList.contains('custom-shape');
+        if (isBox && !el.querySelector('.canva-resize-handle')) {
           const handle = document.createElement('div');
           handle.className = 'canva-resize-handle';
           handle.title = 'Kéo để chỉnh kích thước';
@@ -2946,7 +2947,6 @@
 
         el.onclick = function(e) {
           if (!isEditMode) return;
-          // Don't deselect if clicking inside
           e.stopPropagation();
           selectElement(el);
         };
@@ -3098,14 +3098,31 @@
       selectedElement.style.textAlign = align;
     }
 
-    // Delete Element
+    // Delete Element (Supports deleting labels, subtitles, pills, badges, or whole cards)
     function deleteSelectedElement() {
       if (!selectedElement) return;
-      if (confirm('Bạn có chắc muốn xóa đối tượng này khỏi slide không?')) {
+      const isCard = selectedElement.classList.contains('metric-card');
+      const isLabel = selectedElement.classList.contains('card-label');
+      const isSubtitle = selectedElement.classList.contains('slide-subtitle');
+      const isPill = selectedElement.classList.contains('pill') || selectedElement.classList.contains('slide-meta-row');
+      const isDepth = selectedElement.classList.contains('depth-badge');
+      
+      let itemDesc = 'đối tượng này';
+      if (isCard) itemDesc = 'cả ô thẻ này';
+      else if (isLabel) itemDesc = 'nhãn tiêu đề nhỏ này';
+      else if (isSubtitle) itemDesc = 'phần phụ đề này';
+      else if (isPill) itemDesc = 'thẻ tag / pill này';
+      else if (isDepth) itemDesc = 'thanh đo độ sâu này';
+
+      if (confirm(`Bạn có chắc muốn XÓA ${itemDesc} không?`)) {
         selectedElement.style.display = 'none';
         selectedElement.setAttribute('data-deleted', 'true');
+        if (selectedElement.isContentEditable) {
+          selectedElement.innerText = '';
+        }
         deselectElement();
-        showToast('🗑️ Đã xóa đối tượng. Bấm [Lưu] để đồng bộ!');
+        triggerAutoSave();
+        showToast('🗑️ Đã xóa thành công! Đang tự động lưu & đồng bộ...');
       }
     }
 
@@ -3276,7 +3293,16 @@
               }, 1200);
               triggerAutoSave();
             });
-            el.addEventListener('blur', () => saveEdits(true));
+            el.addEventListener('blur', () => {
+              // Auto-hide elements if text was completely deleted by user
+              if (el.innerText.trim() === '') {
+                if (el.classList.contains('card-label') || el.classList.contains('slide-subtitle') || el.classList.contains('pill') || el.classList.contains('depth-badge')) {
+                  el.style.display = 'none';
+                  el.setAttribute('data-deleted', 'true');
+                }
+              }
+              saveEdits(true);
+            });
             el._hasAutoSave = true;
           }
         } else {
@@ -3302,29 +3328,67 @@
     function extractSlidesData() {
       const slidesList = document.querySelectorAll('.slide');
       const data = [];
+      const isDeletedEl = (el) => !el || el.getAttribute('data-deleted') === 'true' || el.style.display === 'none' || el.innerText.trim() === '';
+
       slidesList.forEach((slideEl, idx) => {
+        const pTarget = slideEl.querySelector('.pill-target');
+        const pQuestion = slideEl.querySelector('.pill-question');
+        const pSpeaker = slideEl.querySelector('.pill-speaker');
+        const sTitle = slideEl.querySelector('.slide-title');
+        const sSubtitle = slideEl.querySelector('.slide-subtitle');
+        const sMetaRow = slideEl.querySelector('.slide-meta-row');
+
         const item = {
           num: idx + 1,
-          target: slideEl.querySelector('.pill-target')?.innerText.trim() || '',
-          question: slideEl.querySelector('.pill-question')?.innerText.trim() || '',
-          speaker: slideEl.querySelector('.pill-speaker')?.innerText.trim() || '',
-          title: slideEl.querySelector('.slide-title')?.innerText.trim() || '',
-          subtitle: slideEl.querySelector('.slide-subtitle')?.innerText.trim() || '',
+          target: pTarget ? pTarget.innerText.trim() : '',
+          targetDeleted: isDeletedEl(pTarget),
+
+          question: pQuestion ? pQuestion.innerText.trim() : '',
+          questionDeleted: isDeletedEl(pQuestion),
+
+          speaker: pSpeaker ? pSpeaker.innerText.trim() : '',
+          speakerDeleted: isDeletedEl(pSpeaker),
+
+          metaRowDeleted: sMetaRow ? (sMetaRow.getAttribute('data-deleted') === 'true' || sMetaRow.style.display === 'none') : false,
+
+          title: sTitle ? sTitle.innerText.trim() : '',
+          titleDeleted: isDeletedEl(sTitle),
           titleStyles: {
-            fontSize: slideEl.querySelector('.slide-title')?.style.fontSize || '',
-            textAlign: slideEl.querySelector('.slide-title')?.style.textAlign || '',
-            transform: slideEl.querySelector('.slide-title')?.style.transform || ''
+            fontSize: sTitle?.style.fontSize || '',
+            textAlign: sTitle?.style.textAlign || '',
+            transform: sTitle?.style.transform || ''
           },
+
+          subtitle: sSubtitle ? sSubtitle.innerText.trim() : '',
+          subtitleDeleted: isDeletedEl(sSubtitle),
+          subtitleStyles: {
+            fontSize: sSubtitle?.style.fontSize || '',
+            textAlign: sSubtitle?.style.textAlign || '',
+            transform: sSubtitle?.style.transform || ''
+          },
+
+          depthDeleted: depthDisplay ? (depthDisplay.getAttribute('data-deleted') === 'true' || depthDisplay.style.display === 'none') : false,
+
           cards: [],
           customElements: []
         };
 
         // Capture Cards & Styles (Separated Box vs Text Opacity)
         slideEl.querySelectorAll('.metric-card').forEach((cardEl, cIdx) => {
+          const cLabel = cardEl.querySelector('.card-label');
+          const cStat = cardEl.querySelector('.card-stat');
+          const cDesc = cardEl.querySelector('.card-desc');
+
           item.cards.push({
-            label: cardEl.querySelector('.card-label')?.innerText.trim() || '',
-            stat: cardEl.querySelector('.card-stat')?.innerText.trim() || '',
-            desc: cardEl.querySelector('.card-desc')?.innerText.trim() || '',
+            label: cLabel ? cLabel.innerText.trim() : '',
+            labelDeleted: isDeletedEl(cLabel),
+
+            stat: cStat ? cStat.innerText.trim() : '',
+            statDeleted: isDeletedEl(cStat),
+
+            desc: cDesc ? cDesc.innerText.trim() : '',
+            descDeleted: isDeletedEl(cDesc),
+
             className: cardEl.className,
             transform: cardEl.style.transform || '',
             opacity: '1', // Container is always 1 so children are never dimmed!
@@ -3333,7 +3397,7 @@
             background: cardEl.style.background || '',
             width: cardEl.style.width || '',
             height: cardEl.style.height || '',
-            isDeleted: cardEl.getAttribute('data-deleted') === 'true'
+            isDeleted: cardEl.getAttribute('data-deleted') === 'true' || cardEl.style.display === 'none'
           });
         });
 
@@ -3350,7 +3414,7 @@
             borderColor: cEl.style.borderColor || '',
             width: cEl.style.width || '',
             height: cEl.style.height || '',
-            isDeleted: cEl.getAttribute('data-deleted') === 'true'
+            isDeleted: cEl.getAttribute('data-deleted') === 'true' || cEl.style.display === 'none'
           });
         });
 
@@ -3468,49 +3532,150 @@
         const slideEl = slidesList[sIdx];
         if (!slideEl) return;
         
-        // 1. Core Text & Meta
-        if (item.target) {
-          const el = slideEl.querySelector('.pill-target');
-          if (el) el.innerText = item.target;
+        // 1. Meta Row & Pills Deletion & Restoration
+        const metaRow = slideEl.querySelector('.slide-meta-row');
+        if (metaRow) {
+          if (item.metaRowDeleted) {
+            metaRow.style.display = 'none';
+            metaRow.setAttribute('data-deleted', 'true');
+          } else {
+            metaRow.style.display = '';
+            metaRow.removeAttribute('data-deleted');
+          }
         }
-        if (item.question) {
-          const el = slideEl.querySelector('.pill-question');
-          if (el) el.innerText = item.question;
+
+        const pTarget = slideEl.querySelector('.pill-target');
+        if (pTarget) {
+          if (item.targetDeleted || (item.target !== undefined && item.target === '')) {
+            pTarget.style.display = 'none';
+            pTarget.setAttribute('data-deleted', 'true');
+            pTarget.innerText = '';
+          } else if (item.target !== undefined) {
+            pTarget.innerText = item.target;
+            pTarget.style.display = '';
+            pTarget.removeAttribute('data-deleted');
+          }
         }
-        if (item.speaker) {
-          const el = slideEl.querySelector('.pill-speaker');
-          if (el) el.innerText = item.speaker;
+
+        const pQuestion = slideEl.querySelector('.pill-question');
+        if (pQuestion) {
+          if (item.questionDeleted || (item.question !== undefined && item.question === '')) {
+            pQuestion.style.display = 'none';
+            pQuestion.setAttribute('data-deleted', 'true');
+            pQuestion.innerText = '';
+          } else if (item.question !== undefined) {
+            pQuestion.innerText = item.question;
+            pQuestion.style.display = '';
+            pQuestion.removeAttribute('data-deleted');
+          }
         }
-        if (item.title) {
-          const el = slideEl.querySelector('.slide-title');
-          if (el) {
-            el.innerText = item.title;
+
+        const pSpeaker = slideEl.querySelector('.pill-speaker');
+        if (pSpeaker) {
+          if (item.speakerDeleted || (item.speaker !== undefined && item.speaker === '')) {
+            pSpeaker.style.display = 'none';
+            pSpeaker.setAttribute('data-deleted', 'true');
+            pSpeaker.innerText = '';
+          } else if (item.speaker !== undefined) {
+            pSpeaker.innerText = item.speaker;
+            pSpeaker.style.display = '';
+            pSpeaker.removeAttribute('data-deleted');
+          }
+        }
+
+        // 2. Title & Subtitle Deletion & Restoration
+        const sTitle = slideEl.querySelector('.slide-title');
+        if (sTitle) {
+          if (item.titleDeleted || (item.title !== undefined && item.title === '')) {
+            sTitle.style.display = 'none';
+            sTitle.setAttribute('data-deleted', 'true');
+          } else if (item.title !== undefined) {
+            sTitle.innerText = item.title;
+            sTitle.style.display = '';
+            sTitle.removeAttribute('data-deleted');
             if (item.titleStyles) {
-              if (item.titleStyles.fontSize) el.style.fontSize = item.titleStyles.fontSize;
-              if (item.titleStyles.textAlign) el.style.textAlign = item.titleStyles.textAlign;
-              if (item.titleStyles.transform) el.style.transform = item.titleStyles.transform;
+              if (item.titleStyles.fontSize) sTitle.style.fontSize = item.titleStyles.fontSize;
+              if (item.titleStyles.textAlign) sTitle.style.textAlign = item.titleStyles.textAlign;
+              if (item.titleStyles.transform) sTitle.style.transform = item.titleStyles.transform;
             }
           }
         }
-        if (item.subtitle) {
-          const el = slideEl.querySelector('.slide-subtitle');
-          if (el) el.innerText = item.subtitle;
+
+        const sSubtitle = slideEl.querySelector('.slide-subtitle');
+        if (sSubtitle) {
+          if (item.subtitleDeleted || (item.subtitle !== undefined && item.subtitle === '')) {
+            sSubtitle.style.display = 'none';
+            sSubtitle.setAttribute('data-deleted', 'true');
+            sSubtitle.innerText = '';
+          } else if (item.subtitle !== undefined) {
+            sSubtitle.innerText = item.subtitle;
+            sSubtitle.style.display = '';
+            sSubtitle.removeAttribute('data-deleted');
+            if (item.subtitleStyles) {
+              if (item.subtitleStyles.fontSize) sSubtitle.style.fontSize = item.subtitleStyles.fontSize;
+              if (item.subtitleStyles.textAlign) sSubtitle.style.textAlign = item.subtitleStyles.textAlign;
+              if (item.subtitleStyles.transform) sSubtitle.style.transform = item.subtitleStyles.transform;
+            }
+          }
         }
 
-        // 2. Cards & Card Styles (Separated Box vs Text Opacity)
+        // Depth Display
+        if (item.depthDeleted && depthDisplay) {
+          depthDisplay.style.display = 'none';
+          depthDisplay.setAttribute('data-deleted', 'true');
+        }
+
+        // 3. Cards & Card Styles (Separated Box vs Text Opacity)
         if (item.cards) {
           const cardEls = slideEl.querySelectorAll('.metric-card');
           item.cards.forEach((c, cIdx) => {
             if (cardEls[cIdx]) {
               const cardEl = cardEls[cIdx];
-              if (c.label) cardEl.querySelector('.card-label').innerText = c.label;
-              if (c.stat) cardEl.querySelector('.card-stat').innerText = c.stat;
-              if (c.desc) cardEl.querySelector('.card-desc').innerText = c.desc;
+              
+              // Card Label (Supports deletion / hiding)
+              const cLabel = cardEl.querySelector('.card-label');
+              if (cLabel) {
+                if (c.labelDeleted || (c.label !== undefined && c.label === '')) {
+                  cLabel.style.display = 'none';
+                  cLabel.setAttribute('data-deleted', 'true');
+                  cLabel.innerText = '';
+                } else if (c.label !== undefined) {
+                  cLabel.innerText = c.label;
+                  cLabel.style.display = '';
+                  cLabel.removeAttribute('data-deleted');
+                }
+              }
+
+              // Card Stat (Supports deletion / hiding)
+              const cStat = cardEl.querySelector('.card-stat');
+              if (cStat) {
+                if (c.statDeleted || (c.stat !== undefined && c.stat === '')) {
+                  cStat.style.display = 'none';
+                  cStat.setAttribute('data-deleted', 'true');
+                } else if (c.stat !== undefined) {
+                  cStat.innerText = c.stat;
+                  cStat.style.display = '';
+                  cStat.removeAttribute('data-deleted');
+                }
+              }
+
+              // Card Desc (Supports deletion / hiding)
+              const cDesc = cardEl.querySelector('.card-desc');
+              if (cDesc) {
+                if (c.descDeleted || (c.desc !== undefined && c.desc === '')) {
+                  cDesc.style.display = 'none';
+                  cDesc.setAttribute('data-deleted', 'true');
+                } else if (c.desc !== undefined) {
+                  cDesc.innerText = c.desc;
+                  cDesc.style.display = '';
+                  cDesc.removeAttribute('data-deleted');
+                }
+              }
+
               if (c.className) cardEl.className = c.className;
               if (c.transform) cardEl.style.transform = c.transform;
 
               // CRITICAL: Separate Box Opacity vs Text Opacity
-              // Convert any legacy c.opacity < 1 into background opacity so text is NOT dimmed!
               let bgOp = c.bgOpacity;
               if ((bgOp === undefined || bgOp === '') && c.opacity && parseFloat(c.opacity) < 1) {
                 bgOp = Math.round(parseFloat(c.opacity) * 100);
@@ -3523,10 +3688,8 @@
                 cardEl.style.background = c.background;
               }
 
-              // Container is ALWAYS 1 so text is never dimmed by card box
               cardEl.style.opacity = '1';
 
-              // Text Opacity applied directly to text elements
               if (c.textOpacity !== undefined && c.textOpacity !== '') {
                 cardEl.dataset.textOpacity = c.textOpacity;
                 const top = (parseFloat(c.textOpacity) / 100).toFixed(2);
@@ -3552,7 +3715,7 @@
           });
         }
 
-        // 3. Custom Elements Rebuilding
+        // 4. Custom Elements Rebuilding
         if (item.customElements && item.customElements.length) {
           item.customElements.forEach(ce => {
             let existing = slideEl.querySelector(`[data-custom-id="${ce.id}"]`);
