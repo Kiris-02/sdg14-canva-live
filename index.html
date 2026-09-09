@@ -3052,8 +3052,12 @@
         let parentEl = sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentElement : sel.anchorNode;
         if (parentEl) {
           const curSize = parseFloat(window.getComputedStyle(parentEl).fontSize);
-          parentEl.style.fontSize = `${Math.max(12, curSize + delta)}px`;
-          showToast(`🔤 Đã đổi cỡ chữ: ${Math.round(curSize + delta)}px`);
+          const newSize = Math.max(10, Math.round(curSize + delta));
+          parentEl.style.fontSize = `${newSize}px`;
+          parentEl.dataset.fontSize = `${newSize}px`;
+          saveCurrentTextSelection();
+          saveEdits(true);
+          showToast(`🔤 Đã đổi cỡ chữ: ${newSize}px (Đã lưu)`);
         }
       }
     }
@@ -3298,17 +3302,36 @@
       setElementBgOpacity(val);
     }
 
-    // Font Size Setting
+    // Font Size Setting (Saves to state & Cloud)
     function adjustFontSize(delta) {
       if (!selectedElement) return;
+      saveUndoState();
       const curSize = parseFloat(window.getComputedStyle(selectedElement).fontSize);
-      selectedElement.style.fontSize = `${Math.max(12, curSize + delta)}px`;
+      const newSize = Math.max(10, Math.round(curSize + delta));
+      selectedElement.style.fontSize = `${newSize}px`;
+      selectedElement.dataset.fontSize = `${newSize}px`;
+      saveEdits(true);
+      showToast(`🔤 Đã đổi cỡ chữ: ${newSize}px (Đã lưu)`);
     }
 
-    // Text Alignment
+    // Font Family Setting
+    function setElementFontFamily(fontName) {
+      if (!selectedElement) return;
+      saveUndoState();
+      selectedElement.style.fontFamily = fontName;
+      selectedElement.dataset.fontFamily = fontName;
+      saveEdits(true);
+      showToast('🔤 Đã đổi phông chữ (Đã lưu)!');
+    }
+
+    // Text Alignment (Saves to state & Cloud)
     function setElementAlign(align) {
       if (!selectedElement) return;
+      saveUndoState();
       selectedElement.style.textAlign = align;
+      selectedElement.dataset.textAlign = align;
+      saveEdits(true);
+      showToast(`↔️ Đã căn lề: ${align}`);
     }
 
     // Delete Element (Supports deleting labels, subtitles, pills, badges, or whole cards)
@@ -3600,24 +3623,32 @@
             label: cLabel ? cLabel.innerText.trim() : '',
             labelHtml: cLabel ? cLabel.innerHTML : '',
             labelColor: cLabel?.style.color || cLabel?.dataset.color || '',
+            labelFontSize: cLabel?.style.fontSize || cLabel?.dataset.fontSize || '',
             labelDeleted: isDeletedEl(cLabel),
 
             stat: cStat ? cStat.innerText.trim() : '',
             statHtml: cStat ? cStat.innerHTML : '',
             statColor: cStat?.style.color || cStat?.dataset.color || '',
+            statFontSize: cStat?.style.fontSize || cStat?.dataset.fontSize || '',
+            statFontFamily: cStat?.style.fontFamily || cStat?.dataset.fontFamily || '',
+            statTextAlign: cStat?.style.textAlign || cStat?.dataset.textAlign || '',
             statDeleted: isDeletedEl(cStat),
 
             desc: cDesc ? cDesc.innerText.trim() : '',
             descHtml: cDesc ? cDesc.innerHTML : '',
             descColor: cDesc?.style.color || cDesc?.dataset.color || '',
+            descFontSize: cDesc?.style.fontSize || cDesc?.dataset.fontSize || '',
+            descFontFamily: cDesc?.style.fontFamily || cDesc?.dataset.fontFamily || '',
+            descTextAlign: cDesc?.style.textAlign || cDesc?.dataset.textAlign || '',
             descDeleted: isDeletedEl(cDesc),
 
             className: cardEl.className,
             transform: cardEl.style.transform || '',
-            opacity: '1', // Container is always 1 so children are never dimmed!
+            opacity: '1',
             bgOpacity: cardEl.dataset.bgOpacity || (cardEl.style.background ? '' : '72'),
             textOpacity: cardEl.dataset.textOpacity || '100',
             background: cardEl.style.background || '',
+            fontSize: cardEl.style.fontSize || cardEl.dataset.fontSize || '',
             width: cardEl.style.width || '',
             height: cardEl.style.height || '',
             isDeleted: cardEl.getAttribute('data-deleted') === 'true' || cardEl.style.display === 'none'
@@ -3864,7 +3895,7 @@
             if (cardEls[cIdx]) {
               const cardEl = cardEls[cIdx];
               
-              // Card Label (Supports deletion, color, rich HTML)
+              // Card Label (Supports deletion, color, fontSize, rich HTML)
               const cLabel = cardEl.querySelector('.card-label');
               if (cLabel) {
                 if (c.labelDeleted || (c.label !== undefined && c.label === '' && !c.labelHtml)) {
@@ -3875,12 +3906,13 @@
                   if (c.labelHtml) cLabel.innerHTML = c.labelHtml;
                   else cLabel.innerText = c.label;
                   if (c.labelColor) cLabel.style.color = c.labelColor;
+                  if (c.labelFontSize) cLabel.style.fontSize = c.labelFontSize;
                   cLabel.style.display = '';
                   cLabel.removeAttribute('data-deleted');
                 }
               }
 
-              // Card Stat (Supports deletion, color, rich HTML)
+              // Card Stat (Supports deletion, color, fontSize, fontFamily, textAlign, rich HTML)
               const cStat = cardEl.querySelector('.card-stat');
               if (cStat) {
                 if (c.statDeleted || (c.stat !== undefined && c.stat === '' && !c.statHtml)) {
@@ -3891,12 +3923,15 @@
                   if (c.statHtml) cStat.innerHTML = c.statHtml;
                   else cStat.innerText = c.stat;
                   if (c.statColor) cStat.style.color = c.statColor;
+                  if (c.statFontSize) cStat.style.fontSize = c.statFontSize;
+                  if (c.statFontFamily) cStat.style.fontFamily = c.statFontFamily;
+                  if (c.statTextAlign) cStat.style.textAlign = c.statTextAlign;
                   cStat.style.display = '';
                   cStat.removeAttribute('data-deleted');
                 }
               }
 
-              // Card Desc (Supports deletion, color, rich HTML)
+              // Card Desc (Supports deletion, color, fontSize, fontFamily, textAlign, rich HTML)
               const cDesc = cardEl.querySelector('.card-desc');
               if (cDesc) {
                 if (c.descDeleted || (c.desc !== undefined && c.desc === '' && !c.descHtml)) {
@@ -3907,10 +3942,15 @@
                   if (c.descHtml) cDesc.innerHTML = c.descHtml;
                   else cDesc.innerText = c.desc;
                   if (c.descColor) cDesc.style.color = c.descColor;
+                  if (c.descFontSize) cDesc.style.fontSize = c.descFontSize;
+                  if (c.descFontFamily) cDesc.style.fontFamily = c.descFontFamily;
+                  if (c.descTextAlign) cDesc.style.textAlign = c.descTextAlign;
                   cDesc.style.display = '';
                   cDesc.removeAttribute('data-deleted');
                 }
               }
+
+              if (c.fontSize) cardEl.style.fontSize = c.fontSize;
 
               if (c.className) cardEl.className = c.className;
               if (c.transform) cardEl.style.transform = c.transform;
