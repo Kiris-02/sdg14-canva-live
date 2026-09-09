@@ -3723,7 +3723,7 @@
     async function saveEdits(isSilent = false) {
       const data = extractSlidesData();
       try {
-        localStorage.setItem('sdg14_slides_custom_data', JSON.stringify(data));
+        localStorage.setItem('sdg14_slides_custom_data_v3', JSON.stringify(data));
       } catch (e) {}
 
       setCloudStatus('saving');
@@ -4010,7 +4010,7 @@
 
     async function applySavedEdits() {
       // 1. Render from local storage immediately for fast load
-      const saved = localStorage.getItem('sdg14_slides_custom_data');
+      const saved = localStorage.getItem('sdg14_slides_custom_data_v3');
       if (saved) {
         try {
           renderDataToDOM(JSON.parse(saved));
@@ -4022,7 +4022,7 @@
       if (cloudRes && cloudRes.slides && cloudRes.slides.length) {
         renderDataToDOM(cloudRes.slides);
         try {
-          localStorage.setItem('sdg14_slides_custom_data', JSON.stringify(cloudRes.slides));
+          localStorage.setItem('sdg14_slides_custom_data_v3', JSON.stringify(cloudRes.slides));
         } catch (e) {}
         if (cloudRes.updatedAt) {
           lastCloudTimestamp = new Date(cloudRes.updatedAt).getTime();
@@ -4043,7 +4043,7 @@
             lastCloudTimestamp = t;
             renderDataToDOM(latest.slides);
             try {
-              localStorage.setItem('sdg14_slides_custom_data', JSON.stringify(latest.slides));
+              localStorage.setItem('sdg14_slides_custom_data_v3', JSON.stringify(latest.slides));
             } catch (e) {}
             setCloudStatus('synced');
             console.log('⚡ Nhận bản cập nhật mới từ thành viên trong nhóm!');
@@ -4085,7 +4085,7 @@
 
     async function resetToOriginal() {
       if (confirm('Bạn có chắc muốn xóa mọi chỉnh sửa và khôi phục TOÀN BỘ 14 SLIDE về nguyên bản ban đầu không?\n\n(Lưu ý: Mọi chỉnh sửa của cả nhóm sẽ được đưa về mặc định và đồng bộ lại trên Cloud)')) {
-        localStorage.removeItem('sdg14_slides_custom_data');
+        localStorage.removeItem('sdg14_slides_custom_data_v3');
         try {
           const freshData = extractSlidesData();
           await syncToCloud(freshData);
