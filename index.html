@@ -1391,7 +1391,7 @@
         <span class="tft-color-dot" style="background:#fb7185;" onmousedown="applyTextColor(event, '#fb7185')" title="Đỏ San Hô"></span>
         <!-- Custom Color Picker Circle -->
         <div class="tft-custom-color-wrap" title="Chọn màu chữ tùy ý">
-          <input type="color" onchange="applyTextColor(null, this.value)">
+          <input type="color" onmousedown="saveCurrentTextSelection()" oninput="applyTextColor(null, this.value)">
         </div>
       </div>
 
@@ -3024,7 +3024,20 @@
       restoreCurrentTextSelection();
       document.execCommand('styleWithCSS', false, true);
       document.execCommand('foreColor', false, colorHex);
+
+      // Handle slide-title gradient override
+      const sel = window.getSelection();
+      if (sel && sel.anchorNode) {
+        const nodeEl = sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentElement : sel.anchorNode;
+        const sTitle = nodeEl ? nodeEl.closest('.slide-title') : null;
+        if (sTitle) {
+          sTitle.style.webkitTextFillColor = 'initial';
+          sTitle.style.background = 'none';
+        }
+      }
+
       saveCurrentTextSelection();
+      saveEdits(true);
       showToast('🎨 Đã đổi màu chữ thành công!');
     }
 
@@ -3199,23 +3212,40 @@
     window.addEventListener('resize', updateInspectorPosition);
     window.addEventListener('scroll', updateInspectorPosition);
 
-    // Color Setting
+    // Color Setting (Supports cards, borders, text, titles, pills)
     function setElementColor(hexColor, borderClass) {
       if (!selectedElement) return;
-      if (selectedElement.classList.contains('metric-card')) {
-        // Remove old border classes
-        ['border-cyan', 'border-emerald', 'border-blue', 'border-gold', 'border-rose'].forEach(c => selectedElement.classList.remove(c));
+      saveUndoState();
+
+      const isCard = selectedElement.classList.contains('metric-card');
+      const isText = selectedElement.classList.contains('card-stat') || 
+                     selectedElement.classList.contains('card-desc') || 
+                     selectedElement.classList.contains('card-label') || 
+                     selectedElement.classList.contains('slide-title') || 
+                     selectedElement.classList.contains('slide-subtitle') ||
+                     selectedElement.isContentEditable;
+
+      if (isCard) {
+        ['border-cyan', 'border-emerald', 'border-blue', 'border-gold', 'border-rose'].forEach(cls => selectedElement.classList.remove(cls));
         if (borderClass) {
           selectedElement.classList.add(borderClass);
         } else {
           selectedElement.style.borderColor = hexColor;
         }
+        selectedElement.dataset.borderColor = hexColor;
+      } else if (isText) {
+        selectedElement.style.color = hexColor;
+        selectedElement.dataset.color = hexColor;
+        if (selectedElement.classList.contains('slide-title')) {
+          selectedElement.style.webkitTextFillColor = hexColor;
+          selectedElement.style.background = 'none';
+        }
       } else {
         selectedElement.style.borderColor = hexColor;
-        if (selectedElement.classList.contains('pill') || selectedElement.classList.contains('custom-divider')) {
-          selectedElement.style.color = hexColor;
-        }
+        selectedElement.style.color = hexColor;
       }
+      
+      saveEdits(true);
       showToast('🎨 Đã cập nhật màu sắc thành công!');
     }
 
@@ -3543,6 +3573,8 @@
           metaRowDeleted: sMetaRow ? (sMetaRow.getAttribute('data-deleted') === 'true' || sMetaRow.style.display === 'none') : false,
 
           title: sTitle ? sTitle.innerText.trim() : '',
+          titleHtml: sTitle ? sTitle.innerHTML : '',
+          titleColor: sTitle?.style.color || sTitle?.dataset.color || '',
           titleDeleted: isDeletedEl(sTitle),
           titleStyles: {
             fontSize: sTitle?.style.fontSize || '',
@@ -3551,6 +3583,8 @@
           },
 
           subtitle: sSubtitle ? sSubtitle.innerText.trim() : '',
+          subtitleHtml: sSubtitle ? sSubtitle.innerHTML : '',
+          subtitleColor: sSubtitle?.style.color || sSubtitle?.dataset.color || '',
           subtitleDeleted: isDeletedEl(sSubtitle),
           subtitleStyles: {
             fontSize: sSubtitle?.style.fontSize || '',
@@ -3572,12 +3606,18 @@
 
           item.cards.push({
             label: cLabel ? cLabel.innerText.trim() : '',
+            labelHtml: cLabel ? cLabel.innerHTML : '',
+            labelColor: cLabel?.style.color || cLabel?.dataset.color || '',
             labelDeleted: isDeletedEl(cLabel),
 
             stat: cStat ? cStat.innerText.trim() : '',
+            statHtml: cStat ? cStat.innerHTML : '',
+            statColor: cStat?.style.color || cStat?.dataset.color || '',
             statDeleted: isDeletedEl(cStat),
 
             desc: cDesc ? cDesc.innerText.trim() : '',
+            descHtml: cDesc ? cDesc.innerHTML : '',
+            descColor: cDesc?.style.color || cDesc?.dataset.color || '',
             descDeleted: isDeletedEl(cDesc),
 
             className: cardEl.className,
@@ -3774,16 +3814,23 @@
           }
         }
 
-        // 2. Title & Subtitle Deletion & Restoration
+        // 2. Title & Subtitle Deletion & Restoration (Supports color & rich HTML)
         const sTitle = slideEl.querySelector('.slide-title');
         if (sTitle) {
-          if (item.titleDeleted || (item.title !== undefined && item.title === '')) {
+          if (item.titleDeleted || (item.title !== undefined && item.title === '' && !item.titleHtml)) {
             sTitle.style.display = 'none';
             sTitle.setAttribute('data-deleted', 'true');
-          } else if (item.title !== undefined) {
-            sTitle.innerText = item.title;
+            sTitle.innerText = '';
+          } else if (item.title !== undefined || item.titleHtml !== undefined) {
+            if (item.titleHtml) sTitle.innerHTML = item.titleHtml;
+            else sTitle.innerText = item.title;
             sTitle.style.display = '';
             sTitle.removeAttribute('data-deleted');
+            if (item.titleColor) {
+              sTitle.style.color = item.titleColor;
+              sTitle.style.webkitTextFillColor = item.titleColor;
+              sTitle.style.background = 'none';
+            }
             if (item.titleStyles) {
               if (item.titleStyles.fontSize) sTitle.style.fontSize = item.titleStyles.fontSize;
               if (item.titleStyles.textAlign) sTitle.style.textAlign = item.titleStyles.textAlign;
@@ -3794,14 +3841,16 @@
 
         const sSubtitle = slideEl.querySelector('.slide-subtitle');
         if (sSubtitle) {
-          if (item.subtitleDeleted || (item.subtitle !== undefined && item.subtitle === '')) {
+          if (item.subtitleDeleted || (item.subtitle !== undefined && item.subtitle === '' && !item.subtitleHtml)) {
             sSubtitle.style.display = 'none';
             sSubtitle.setAttribute('data-deleted', 'true');
             sSubtitle.innerText = '';
-          } else if (item.subtitle !== undefined) {
-            sSubtitle.innerText = item.subtitle;
+          } else if (item.subtitle !== undefined || item.subtitleHtml !== undefined) {
+            if (item.subtitleHtml) sSubtitle.innerHTML = item.subtitleHtml;
+            else sSubtitle.innerText = item.subtitle;
             sSubtitle.style.display = '';
             sSubtitle.removeAttribute('data-deleted');
+            if (item.subtitleColor) sSubtitle.style.color = item.subtitleColor;
             if (item.subtitleStyles) {
               if (item.subtitleStyles.fontSize) sSubtitle.style.fontSize = item.subtitleStyles.fontSize;
               if (item.subtitleStyles.textAlign) sSubtitle.style.textAlign = item.subtitleStyles.textAlign;
@@ -3823,41 +3872,49 @@
             if (cardEls[cIdx]) {
               const cardEl = cardEls[cIdx];
               
-              // Card Label (Supports deletion / hiding)
+              // Card Label (Supports deletion, color, rich HTML)
               const cLabel = cardEl.querySelector('.card-label');
               if (cLabel) {
-                if (c.labelDeleted || (c.label !== undefined && c.label === '')) {
+                if (c.labelDeleted || (c.label !== undefined && c.label === '' && !c.labelHtml)) {
                   cLabel.style.display = 'none';
                   cLabel.setAttribute('data-deleted', 'true');
                   cLabel.innerText = '';
-                } else if (c.label !== undefined) {
-                  cLabel.innerText = c.label;
+                } else if (c.label !== undefined || c.labelHtml !== undefined) {
+                  if (c.labelHtml) cLabel.innerHTML = c.labelHtml;
+                  else cLabel.innerText = c.label;
+                  if (c.labelColor) cLabel.style.color = c.labelColor;
                   cLabel.style.display = '';
                   cLabel.removeAttribute('data-deleted');
                 }
               }
 
-              // Card Stat (Supports deletion / hiding)
+              // Card Stat (Supports deletion, color, rich HTML)
               const cStat = cardEl.querySelector('.card-stat');
               if (cStat) {
-                if (c.statDeleted || (c.stat !== undefined && c.stat === '')) {
+                if (c.statDeleted || (c.stat !== undefined && c.stat === '' && !c.statHtml)) {
                   cStat.style.display = 'none';
                   cStat.setAttribute('data-deleted', 'true');
-                } else if (c.stat !== undefined) {
-                  cStat.innerText = c.stat;
+                  cStat.innerText = '';
+                } else if (c.stat !== undefined || c.statHtml !== undefined) {
+                  if (c.statHtml) cStat.innerHTML = c.statHtml;
+                  else cStat.innerText = c.stat;
+                  if (c.statColor) cStat.style.color = c.statColor;
                   cStat.style.display = '';
                   cStat.removeAttribute('data-deleted');
                 }
               }
 
-              // Card Desc (Supports deletion / hiding)
+              // Card Desc (Supports deletion, color, rich HTML)
               const cDesc = cardEl.querySelector('.card-desc');
               if (cDesc) {
-                if (c.descDeleted || (c.desc !== undefined && c.desc === '')) {
+                if (c.descDeleted || (c.desc !== undefined && c.desc === '' && !c.descHtml)) {
                   cDesc.style.display = 'none';
                   cDesc.setAttribute('data-deleted', 'true');
-                } else if (c.desc !== undefined) {
-                  cDesc.innerText = c.desc;
+                  cDesc.innerText = '';
+                } else if (c.desc !== undefined || c.descHtml !== undefined) {
+                  if (c.descHtml) cDesc.innerHTML = c.descHtml;
+                  else cDesc.innerText = c.desc;
+                  if (c.descColor) cDesc.style.color = c.descColor;
                   cDesc.style.display = '';
                   cDesc.removeAttribute('data-deleted');
                 }
