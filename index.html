@@ -4165,8 +4165,7 @@
         }
       }
 
-      const htmlStr = '<!DOCTYPE html>
-' + clone.outerHTML;
+      const htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
       const blob = new Blob([htmlStr], { type: 'text/html;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
