@@ -1234,7 +1234,7 @@
           <div id="add-menu" class="add-dropdown-menu hidden">
             <button class="add-item-btn" onclick="addNewElement('card')">📊 Thêm Thẻ số liệu</button>
             <button class="add-item-btn" onclick="addNewElement('textbox')">📝 Thêm Hộp chữ tự do</button>
-            <button class="add-item-btn" onclick="addNewElement('glassbox')">🔲 Thêm Khung kính mờ</button>
+            <button class="add-item-btn" onclick="addNewElement('glassbox')">🔲 Thêm Khung kính trong suốt</button>
             <button class="add-item-btn" onclick="addNewElement('pill')">🏷️ Thêm Huy hiệu</button>
             <button class="add-item-btn" onclick="addNewElement('divider')">➖ Thêm Đường kẻ sáng</button>
           </div>
@@ -1311,21 +1311,25 @@
         <span class="ci-color-dot" style="background:#c084fc;" onclick="setElementColor('#c084fc', 'border-blue')" title="Tím Vực Sâu"></span>
         <span class="ci-color-dot" style="background:#fbbf24;" onclick="setElementColor('#fbbf24', 'border-gold')" title="Vàng Hoàng Hôn"></span>
         <span class="ci-color-dot" style="background:#fb7185;" onclick="setElementColor('#fb7185', 'border-rose')" title="Đỏ San Hô"></span>
-        <span class="ci-color-dot" style="background:rgba(15,23,42,0.85); border-color:#94a3b8;" onclick="setElementColor('rgba(15,23,42,0.85)', '')" title="Kính Mờ Tối"></span>
+        <span class="ci-color-dot" style="background:rgba(15,23,42,0.85); border-color:#94a3b8;" onclick="setElementColor('rgba(15,23,42,0.85)', '')" title="Kính Trong Suốt Tối"></span>
       </div>
 
-      <!-- Box / Background Glass Opacity Slider -->
-      <div class="ci-group ci-slider-wrap" title="Độ trong suốt của Nền Ô / Khung kính (chữ bên trong vẫn luôn sáng rõ 100%)">
-        <span>Nền ô:</span>
-        <input type="range" class="ci-slider" id="ci-bg-opacity" min="0" max="100" value="72" oninput="setElementBgOpacity(this.value)">
-        <span id="ci-bg-opacity-val" style="min-width: 28px; font-size: 11px; color: #38bdf8; font-weight: 600;">72%</span>
-      </div>
-
-      <!-- Text / Content Opacity Slider -->
-      <div class="ci-group ci-slider-wrap" title="Độ mờ của Chữ / Nội dung bên trong (độc lập hoàn toàn với nền ô)">
-        <span>Chữ:</span>
-        <input type="range" class="ci-slider" id="ci-text-opacity" min="20" max="100" value="100" oninput="setElementTextOpacity(this.value)">
-        <span id="ci-text-opacity-val" style="min-width: 28px; font-size: 11px; color: #38bdf8; font-weight: 600;">100%</span>
+      <!-- Chức năng Độ trong suốt (Canva Transparency) -->
+      <div class="ci-group" title="Chức năng Độ trong suốt (Canva Transparency): Tách biệt Nền và Chữ">
+        <span style="font-size:0.75rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.25rem;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 5h4v4H5V5zm0 8h4v4H5v-4zm6-4h4v4h-4V9zm0 8h4v4h-4v-4zm6-8h4v4h-4V9zm0 8h4v4h-4v-4zm0-12h4v4h-4V5zm-6 0h4v4h-4V5z"/></svg>
+          Trong suốt:
+        </span>
+        <div class="ci-slider-wrap" title="Độ trong suốt Nền (0% = Nhìn xuyên qua đại dương, 100% = Đậm đặc). Chữ bên trong giữ nguyên 100% sáng rõ.">
+          <span style="color:#94a3b8;">Nền:</span>
+          <input type="range" class="ci-slider" id="ci-bg-opacity" min="0" max="100" value="72" oninput="setElementBgOpacity(this.value)">
+          <span id="ci-bg-opacity-val" style="min-width: 26px; font-size: 11px; color: #38bdf8; font-weight: 600;">72%</span>
+        </div>
+        <div class="ci-slider-wrap" title="Độ trong suốt Chữ (0% = Tàng hình, 100% = Sáng rõ nét 100%). Độc lập hoàn toàn với nền ô.">
+          <span style="color:#94a3b8;">Chữ:</span>
+          <input type="range" class="ci-slider" id="ci-text-opacity" min="10" max="100" value="100" oninput="setElementTextOpacity(this.value)">
+          <span id="ci-text-opacity-val" style="min-width: 26px; font-size: 11px; color: #38bdf8; font-weight: 600;">100%</span>
+        </div>
       </div>
 
       <!-- Font Sizing -->
@@ -3242,7 +3246,7 @@
         newEl.setAttribute('data-custom-id', customId);
         newEl.setAttribute('contenteditable', 'true');
         newEl.setAttribute('spellcheck', 'false');
-        newEl.innerHTML = '<h3 style="color:#38bdf8; margin-bottom:0.5rem;">Khung Kính Mờ</h3><p style="color:#cbd5e1;">Nội dung bên trong khung...</p>';
+        newEl.innerHTML = '<h3 style="color:#38bdf8; margin-bottom:0.5rem;">Khung Kính Trong Suốt</h3><p style="color:#cbd5e1;">Nội dung bên trong khung...</p>';
         activeSlide.appendChild(newEl);
       } else if (type === 'pill') {
         newEl = document.createElement('span');
