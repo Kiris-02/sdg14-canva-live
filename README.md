@@ -1,4 +1,4 @@
-﻿# 🌊 SDG 14: Life Below Water — Cinematic 3D Deck (Official Sovereign Version)
+# 🌊 SDG 14: Life Below Water — Cinematic 3D Deck (Official Sovereign Version)
 
 > **Tác phẩm Thuyết trình Điện ảnh 3D đỉnh cao về Mục tiêu Phát triển Bền vững SDG 14 (Bảo tồn Đại dương).**  
 > Kết hợp hoàn mỹ giữa công nghệ đồ họa WebGL 3D IMAX/BBC Blue Planet và Trình biên tập trực tiếp Canva Live Editor đồng bộ Đám mây.
@@ -7,8 +7,13 @@
 
 ## 🚀 ĐƯỜNG LINK TRỰC TIẾP (LIVE LINKS)
 
-- 🌊 **Bài Thuyết Trình Trực Tiếp (Live Presentation)**:  
-  👉 **[https://kiris-02.github.io/sdg14-canva-live/](https://kiris-02.github.io/sdg14-canva-live/)**
+- 🎨 **1. Bản Biên tập Trực tiếp (Canva Live Editor Deck)**:  
+  👉 **[https://kiris-02.github.io/sdg14-canva-live/](https://kiris-02.github.io/sdg14-canva-live/)**  
+  *(Dành cho việc chỉnh sửa nội dung, phím `E`, kéo thả card, đổi màu, lưu đám mây Render API)*
+
+- 🎬 **2. Bản Trình chiếu Thuần túy (Pure Presentation Deck)**:  
+  👉 **[https://kiris-02.github.io/sdg14-canva-live/presentation.html](https://kiris-02.github.io/sdg14-canva-live/presentation.html)**  
+  *(Dành riêng cho lên sân khấu thuyết trình: Đã khóa 100% chế độ sửa, triệt tiêu phím `E`, không thanh công cụ, hiệu ứng 3D WebGL và chuyển slide siêu mượt, an toàn tuyệt đối)*
 
 - 🎙️ **Cổng Diễn Giả Độc Lập (Speaker Portal)**:  
   👉 **[https://kiris-02.github.io/sdg14-canva-live/speaker_portal.html](https://kiris-02.github.io/sdg14-canva-live/speaker_portal.html)**
