@@ -618,6 +618,25 @@
        MINI-CANVA VISUAL EDITOR STYLES
        ======================================================== */
     
+    /* True 0% Transparency: Box vanishes completely */
+    .box-vanished {
+      background: transparent !important;
+      background-color: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    .box-vanished::before {
+      opacity: 0 !important;
+      display: none !important;
+    }
+    .box-vanished .card-stat,
+    .box-vanished .card-desc,
+    .box-vanished .card-label {
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 0, 0, 0.8) !important;
+    }
+
     /* Active selection box */
     body.edit-mode-active .canva-selected {
       outline: 2px solid #38bdf8 !important;
@@ -2974,18 +2993,17 @@
       const ciBgOpacity = document.getElementById('ci-bg-opacity');
       const ciBgVal = document.getElementById('ci-bg-opacity-val');
       if (ciBgOpacity) {
-        let curBgOp = selectedElement.dataset.bgOpacity;
+        const targetBox = selectedElement.closest('.metric-card, .custom-shape') || selectedElement;
+        let curBgOp = targetBox.dataset.bgOpacity;
         if (curBgOp === undefined || curBgOp === '') {
-          // If legacy element has style.opacity < 1, migrate it immediately to background opacity!
-          if (selectedElement.style.opacity && parseFloat(selectedElement.style.opacity) < 1) {
-            curBgOp = Math.round(parseFloat(selectedElement.style.opacity) * 100);
-            selectedElement.dataset.bgOpacity = curBgOp;
-            if (selectedElement.classList.contains('metric-card')) {
-              selectedElement.style.background = `rgba(15, 23, 42, ${(curBgOp / 100).toFixed(2)})`;
-            }
-            selectedElement.style.opacity = '1';
+          if (targetBox.classList.contains('box-vanished') || targetBox.style.background === 'transparent') {
+            curBgOp = 0;
+          } else if (targetBox.style.opacity && parseFloat(targetBox.style.opacity) < 1) {
+            curBgOp = Math.round(parseFloat(targetBox.style.opacity) * 100);
+            targetBox.dataset.bgOpacity = curBgOp;
+            targetBox.style.opacity = '1';
           } else {
-            curBgOp = selectedElement.classList.contains('metric-card') ? 72 : 85;
+            curBgOp = targetBox.classList.contains('metric-card') ? 72 : 85;
           }
         }
         ciBgOpacity.value = curBgOp;
@@ -3046,23 +3064,37 @@
       showToast('🎨 Đã cập nhật màu sắc thành công!');
     }
 
-    // Box / Background Opacity Setting (Separated from text)
+    // Box / Background Opacity Setting (True Transparency: 0% = Vanish Box completely)
     function setElementBgOpacity(val) {
       if (!selectedElement) return;
       val = Math.max(0, Math.min(100, parseInt(val)));
-      selectedElement.dataset.bgOpacity = val;
+      
+      // Target the container box even if user selected an inner child element
+      const targetBox = selectedElement.closest('.metric-card, .custom-shape') || selectedElement;
+      targetBox.dataset.bgOpacity = val;
+      
       const valEl = document.getElementById('ci-bg-opacity-val');
       if (valEl) valEl.textContent = `${val}%`;
 
-      // Crucial: Container opacity must ALWAYS be 1 so children/text are never dimmed
-      selectedElement.style.opacity = '1';
+      targetBox.style.opacity = '1';
 
-      if (selectedElement.classList.contains('metric-card')) {
-        selectedElement.style.background = `rgba(15, 23, 42, ${(val / 100).toFixed(2)})`;
-      } else if (selectedElement.classList.contains('pill') || selectedElement.classList.contains('custom-shape')) {
-        selectedElement.style.backgroundColor = `rgba(15, 23, 42, ${(val / 100).toFixed(2)})`;
+      if (val === 0) {
+        targetBox.classList.add('box-vanished');
+        targetBox.style.background = 'transparent';
+        targetBox.style.backgroundColor = 'transparent';
+        targetBox.style.backdropFilter = 'none';
+        targetBox.style.webkitBackdropFilter = 'none';
+        targetBox.style.borderColor = 'transparent';
+        targetBox.style.boxShadow = 'none';
       } else {
-        selectedElement.style.backgroundColor = `rgba(15, 23, 42, ${(val / 100).toFixed(2)})`;
+        targetBox.classList.remove('box-vanished');
+        const ratio = val / 100;
+        targetBox.style.background = `rgba(15, 23, 42, ${ratio.toFixed(2)})`;
+        targetBox.style.backgroundColor = `rgba(15, 23, 42, ${ratio.toFixed(2)})`;
+        targetBox.style.backdropFilter = `blur(${Math.round(20 * ratio)}px)`;
+        targetBox.style.webkitBackdropFilter = `blur(${Math.round(20 * ratio)}px)`;
+        targetBox.style.borderColor = `rgba(255, 255, 255, ${(0.15 * ratio).toFixed(2)})`;
+        targetBox.style.boxShadow = ratio > 0.15 ? `0 10px 30px rgba(0, 0, 0, ${(0.4 * ratio).toFixed(2)})` : 'none';
       }
     }
 
@@ -3687,7 +3719,23 @@
 
               if (bgOp !== undefined && bgOp !== '') {
                 cardEl.dataset.bgOpacity = bgOp;
-                cardEl.style.background = `rgba(15, 23, 42, ${(parseFloat(bgOp) / 100).toFixed(2)})`;
+                const bVal = parseInt(bgOp);
+                if (bVal === 0) {
+                  cardEl.classList.add('box-vanished');
+                  cardEl.style.background = 'transparent';
+                  cardEl.style.backgroundColor = 'transparent';
+                  cardEl.style.backdropFilter = 'none';
+                  cardEl.style.webkitBackdropFilter = 'none';
+                  cardEl.style.borderColor = 'transparent';
+                  cardEl.style.boxShadow = 'none';
+                } else {
+                  cardEl.classList.remove('box-vanished');
+                  const ratio = bVal / 100;
+                  cardEl.style.background = `rgba(15, 23, 42, ${ratio.toFixed(2)})`;
+                  cardEl.style.backdropFilter = `blur(${Math.round(20 * ratio)}px)`;
+                  cardEl.style.webkitBackdropFilter = `blur(${Math.round(20 * ratio)}px)`;
+                  cardEl.style.borderColor = `rgba(255, 255, 255, ${(0.15 * ratio).toFixed(2)})`;
+                }
               } else if (c.background) {
                 cardEl.style.background = c.background;
               }
